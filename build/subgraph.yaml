@@ -1,0 +1,105 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: KRBTokenV01
+    network: rinkeby
+    source:
+      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      abi: KRBTokenV01
+      startBlock: 10044457
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Issuer
+        - CredentialSubject
+        - CredentialSchema
+        - VerifiableCredential
+      abis:
+        - name: KRBTokenV01
+          file: KRBTokenV01/abis/KRBTokenV01.json
+      eventHandlers:
+        - event: Deleted(bytes32,string)
+          handler: handleDeleted
+        - event: Disputed(bytes32,bytes32)
+          handler: handleDisputed
+        - event: Expired(bytes32)
+          handler: handleExpired
+        - event: Issued(bytes32,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string))
+          handler: handleIssued
+        - event: Revoked(bytes32,string)
+          handler: handleRevoked
+        - event: Suspended(bytes32,string)
+          handler: handleSuspended
+      file: KRBTokenV01/KRBTokenV01.wasm
+  - kind: ethereum/contract
+    name: erc20
+    network: rinkeby
+    source:
+      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      abi: IERC20
+      startBlock: 10044457
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ERC20Contract
+      abis:
+        - name: IERC20
+          file: erc20/node_modules/@openzeppelin/contracts/build/contracts/IERC20Metadata.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: erc20/erc20.wasm
+  - kind: ethereum/contract
+    name: pausable
+    network: rinkeby
+    source:
+      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      abi: Pausable
+      startBlock: 10044457
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Pausable
+      abis:
+        - name: Pausable
+          file: pausable/node_modules/@openzeppelin/contracts/build/contracts/Pausable.json
+      eventHandlers:
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: pausable/pausable.wasm
+  - kind: ethereum/contract
+    name: accesscontrol
+    network: rinkeby
+    source:
+      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      abi: AccessControl
+      startBlock: 10044457
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - AccessControl
+      abis:
+        - name: AccessControl
+          file: accesscontrol/node_modules/@openzeppelin/contracts/build/contracts/AccessControl.json
+      eventHandlers:
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+      file: accesscontrol/accesscontrol.wasm

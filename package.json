@@ -1,0 +1,20 @@
+{
+  "name": "krb-token-v01",
+  "author": "Krebit <contact@krebit.co>",
+  "license": "MIT",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ krebit/krb-token-v01",
+    "create-local": "graph create --node http://localhost:8020/ krebit/krb-token-v01",
+    "remove-local": "graph remove --node http://localhost:8020/ krebit/krb-token-v01",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 krebit/krb-token-v01"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.21.1",
+    "@graphprotocol/graph-ts": "0.20.0",
+    "@amxx/graphprotocol-utils": "^1.0.0-alpha.12",
+    "@openzeppelin/contracts": "^4.2.0",
+    "@openzeppelin/subgraphs": "^0.1.2"
+  }
+}
