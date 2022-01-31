@@ -152,9 +152,12 @@ type CredentialSchema @entity {
 }
 
 type VerifiableCredential @entity {
+  id: ID!
+  claimId: String
   _context: String
   _type: String
-  id: ID!
+  credentialSubjectDID: String
+  credentialSubjectAddress: Bytes!
   issuer: Issuer!
   credentialSubject: CredentialSubject!
   credentialSchema: CredentialSchema!
@@ -164,4 +167,15 @@ type VerifiableCredential @entity {
   transaction: String
   reason: String
   disputedBy: String
+}
+
+type CredentialRegistry @entity {
+  id: ID!
+  balance: BigInt!
+  issued: BigInt!
+  revoked: BigInt!
+  deleted: BigInt!
+  suspended: BigInt!
+  disputed: BigInt!
+  expired: BigInt!
 }

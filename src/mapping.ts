@@ -7,13 +7,17 @@ import {
   Issued,
   Revoked,
   Suspended,
+  Transfer,
 } from "../generated/KRBTokenV01/KRBTokenV01";
 import {
   Issuer,
   CredentialSubject,
   CredentialSchema,
   VerifiableCredential,
+  CredentialRegistry,
 } from "../generated/schema";
+
+import { constants } from "@amxx/graphprotocol-utils";
 
 import { log } from "@graphprotocol/graph-ts";
 
@@ -57,6 +61,12 @@ export function handleIssued(event: Issued): void {
   let vc = new VerifiableCredential(event.params.uuid.toHexString());
 
   // Entity fields can be set based on event parameters
+  vc.claimId = event.params.vc.id;
+  vc._context = event.params.vc._context;
+  vc._type = event.params.vc._type;
+  vc.credentialSubjectDID = event.params.vc.credentialSubject.id;
+  vc.credentialSubjectAddress =
+    event.params.vc.credentialSubject.ethereumAddress;
   vc.issuer = issuer.id;
   vc.credentialSubject = credentialSubject.id;
   vc.credentialSchema = credentialSchema.id;
@@ -70,6 +80,26 @@ export function handleIssued(event: Issued): void {
 
   // Entities can be written to the store with `.save()`
   vc.save();
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = BigInt.fromI32(1);
+    dailyRegistry.deleted = BigInt.fromI32(0);
+    dailyRegistry.disputed = BigInt.fromI32(0);
+    dailyRegistry.expired = BigInt.fromI32(0);
+    dailyRegistry.revoked = BigInt.fromI32(0);
+    dailyRegistry.suspended = BigInt.fromI32(0);
+    dailyRegistry.balance = BigInt.fromI32(0);
+  } else {
+    dailyRegistry.issued = dailyRegistry.issued.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  totalRegistry.issued = totalRegistry.issued.plus(BigInt.fromI32(1));
+  totalRegistry.save();
 
   // Note: If a handler doesn't require existing field values, it is faster
   // _not_ to load the vc from the store. Instead, create it fresh with
@@ -136,6 +166,31 @@ export function handleDeleted(event: Deleted): void {
   vc.reason = event.params.reason;
 
   vc.save();
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = BigInt.fromI32(0);
+    dailyRegistry.deleted = BigInt.fromI32(1);
+    dailyRegistry.disputed = BigInt.fromI32(0);
+    dailyRegistry.expired = BigInt.fromI32(0);
+    dailyRegistry.revoked = BigInt.fromI32(0);
+    dailyRegistry.suspended = BigInt.fromI32(0);
+    dailyRegistry.balance = BigInt.fromI32(0);
+  } else {
+    dailyRegistry.deleted = dailyRegistry.deleted.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    totalRegistry.deleted = BigInt.fromI32(1);
+  } else {
+    totalRegistry.deleted = totalRegistry.deleted.plus(BigInt.fromI32(1));
+  }
+  totalRegistry.save();
 }
 
 export function handleDisputed(event: Disputed): void {
@@ -146,6 +201,31 @@ export function handleDisputed(event: Disputed): void {
   vc.disputedBy = event.params.disputedBy.toHexString();
 
   vc.save();
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = BigInt.fromI32(0);
+    dailyRegistry.deleted = BigInt.fromI32(0);
+    dailyRegistry.disputed = BigInt.fromI32(1);
+    dailyRegistry.expired = BigInt.fromI32(0);
+    dailyRegistry.revoked = BigInt.fromI32(0);
+    dailyRegistry.suspended = BigInt.fromI32(0);
+    dailyRegistry.balance = BigInt.fromI32(0);
+  } else {
+    dailyRegistry.disputed = dailyRegistry.disputed.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    totalRegistry.disputed = BigInt.fromI32(1);
+  } else {
+    totalRegistry.disputed = totalRegistry.disputed.plus(BigInt.fromI32(1));
+  }
+  totalRegistry.save();
 }
 
 export function handleExpired(event: Expired): void {
@@ -155,6 +235,31 @@ export function handleExpired(event: Expired): void {
   vc.credentialStatus = "Expired";
 
   vc.save();
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = BigInt.fromI32(0);
+    dailyRegistry.deleted = BigInt.fromI32(0);
+    dailyRegistry.disputed = BigInt.fromI32(0);
+    dailyRegistry.expired = BigInt.fromI32(1);
+    dailyRegistry.revoked = BigInt.fromI32(0);
+    dailyRegistry.suspended = BigInt.fromI32(0);
+    dailyRegistry.balance = BigInt.fromI32(0);
+  } else {
+    dailyRegistry.expired = dailyRegistry.expired.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    totalRegistry.expired = BigInt.fromI32(1);
+  } else {
+    totalRegistry.expired = totalRegistry.expired.plus(BigInt.fromI32(1));
+  }
+  totalRegistry.save();
 }
 
 export function handleRevoked(event: Revoked): void {
@@ -165,6 +270,31 @@ export function handleRevoked(event: Revoked): void {
   vc.reason = event.params.reason;
 
   vc.save();
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = BigInt.fromI32(0);
+    dailyRegistry.deleted = BigInt.fromI32(0);
+    dailyRegistry.disputed = BigInt.fromI32(0);
+    dailyRegistry.expired = BigInt.fromI32(0);
+    dailyRegistry.revoked = BigInt.fromI32(1);
+    dailyRegistry.suspended = BigInt.fromI32(0);
+    dailyRegistry.balance = BigInt.fromI32(0);
+  } else {
+    dailyRegistry.revoked = dailyRegistry.revoked.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    totalRegistry.revoked = BigInt.fromI32(1);
+  } else {
+    totalRegistry.revoked = totalRegistry.revoked.plus(BigInt.fromI32(1));
+  }
+  totalRegistry.save();
 }
 
 export function handleSuspended(event: Suspended): void {
@@ -175,4 +305,83 @@ export function handleSuspended(event: Suspended): void {
   vc.reason = event.params.reason;
 
   vc.save();
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = BigInt.fromI32(0);
+    dailyRegistry.deleted = BigInt.fromI32(0);
+    dailyRegistry.disputed = BigInt.fromI32(0);
+    dailyRegistry.expired = BigInt.fromI32(0);
+    dailyRegistry.revoked = BigInt.fromI32(0);
+    dailyRegistry.suspended = BigInt.fromI32(1);
+    dailyRegistry.balance = BigInt.fromI32(0);
+  } else {
+    dailyRegistry.suspended = dailyRegistry.suspended.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    totalRegistry.suspended = BigInt.fromI32(1);
+  } else {
+    totalRegistry.suspended = totalRegistry.suspended.plus(BigInt.fromI32(1));
+  }
+  totalRegistry.save();
+}
+
+export function handleTransfer(event: Transfer): void {
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = event.params.value;
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = event.params.value.neg();
+    }
+    dailyRegistry.issued = BigInt.fromI32(0);
+    dailyRegistry.deleted = BigInt.fromI32(0);
+    dailyRegistry.disputed = BigInt.fromI32(0);
+    dailyRegistry.expired = BigInt.fromI32(0);
+    dailyRegistry.revoked = BigInt.fromI32(0);
+    dailyRegistry.suspended = BigInt.fromI32(0);
+  } else {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = dailyRegistry.balance.plus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = dailyRegistry.balance.minus(event.params.value);
+    }
+  }
+  dailyRegistry.save();
+
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.balance = event.params.value;
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.balance = event.params.value.neg();
+    }
+    totalRegistry.issued = BigInt.fromI32(0);
+    totalRegistry.deleted = BigInt.fromI32(0);
+    totalRegistry.disputed = BigInt.fromI32(0);
+    totalRegistry.expired = BigInt.fromI32(0);
+    totalRegistry.revoked = BigInt.fromI32(0);
+    totalRegistry.suspended = BigInt.fromI32(0);
+  } else {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.balance = totalRegistry.balance.plus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.balance = totalRegistry.balance.minus(event.params.value);
+    }
+  }
+
+  totalRegistry.save();
 }

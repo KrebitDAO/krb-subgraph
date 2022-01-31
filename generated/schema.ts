@@ -1530,6 +1530,32 @@ export class VerifiableCredential extends Entity {
     return store.get("VerifiableCredential", id) as VerifiableCredential | null;
   }
 
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get claimId(): string | null {
+    let value = this.get("claimId");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set claimId(value: string | null) {
+    if (value === null) {
+      this.unset("claimId");
+    } else {
+      this.set("claimId", Value.fromString(value as string));
+    }
+  }
+
   get _context(): string | null {
     let value = this.get("_context");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -1564,13 +1590,30 @@ export class VerifiableCredential extends Entity {
     }
   }
 
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
+  get credentialSubjectDID(): string | null {
+    let value = this.get("credentialSubjectDID");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set credentialSubjectDID(value: string | null) {
+    if (value === null) {
+      this.unset("credentialSubjectDID");
+    } else {
+      this.set("credentialSubjectDID", Value.fromString(value as string));
+    }
+  }
+
+  get credentialSubjectAddress(): Bytes {
+    let value = this.get("credentialSubjectAddress");
+    return value.toBytes();
+  }
+
+  set credentialSubjectAddress(value: Bytes) {
+    this.set("credentialSubjectAddress", Value.fromBytes(value));
   }
 
   get issuer(): string {
@@ -1700,5 +1743,99 @@ export class VerifiableCredential extends Entity {
     } else {
       this.set("disputedBy", Value.fromString(value as string));
     }
+  }
+}
+
+export class CredentialRegistry extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save CredentialRegistry entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save CredentialRegistry entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("CredentialRegistry", id.toString(), this);
+  }
+
+  static load(id: string): CredentialRegistry | null {
+    return store.get("CredentialRegistry", id) as CredentialRegistry | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
+  }
+
+  get issued(): BigInt {
+    let value = this.get("issued");
+    return value.toBigInt();
+  }
+
+  set issued(value: BigInt) {
+    this.set("issued", Value.fromBigInt(value));
+  }
+
+  get revoked(): BigInt {
+    let value = this.get("revoked");
+    return value.toBigInt();
+  }
+
+  set revoked(value: BigInt) {
+    this.set("revoked", Value.fromBigInt(value));
+  }
+
+  get deleted(): BigInt {
+    let value = this.get("deleted");
+    return value.toBigInt();
+  }
+
+  set deleted(value: BigInt) {
+    this.set("deleted", Value.fromBigInt(value));
+  }
+
+  get suspended(): BigInt {
+    let value = this.get("suspended");
+    return value.toBigInt();
+  }
+
+  set suspended(value: BigInt) {
+    this.set("suspended", Value.fromBigInt(value));
+  }
+
+  get disputed(): BigInt {
+    let value = this.get("disputed");
+    return value.toBigInt();
+  }
+
+  set disputed(value: BigInt) {
+    this.set("disputed", Value.fromBigInt(value));
+  }
+
+  get expired(): BigInt {
+    let value = this.get("expired");
+    return value.toBigInt();
+  }
+
+  set expired(value: BigInt) {
+    this.set("expired", Value.fromBigInt(value));
   }
 }

@@ -18,6 +18,7 @@ dataSources:
         - CredentialSubject
         - CredentialSchema
         - VerifiableCredential
+        - CredentialRegistry
       abis:
         - name: KRBTokenV01
           file: KRBTokenV01/abis/KRBTokenV01.json
@@ -34,6 +35,8 @@ dataSources:
           handler: handleRevoked
         - event: Suspended(bytes32,string)
           handler: handleSuspended
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
       file: KRBTokenV01/KRBTokenV01.wasm
   - kind: ethereum/contract
     name: erc20
