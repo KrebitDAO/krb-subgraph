@@ -67,6 +67,7 @@ export function handleIssued(event: Issued): void {
   credentialSubject.encrypted = event.params.vc.credentialSubject.encrypted;
   credentialSubject.trust = event.params.vc.credentialSubject.trust;
   credentialSubject.stake = event.params.vc.credentialSubject.stake;
+  credentialSubject.price = event.params.vc.credentialSubject.price;
   credentialSubject.nbf = event.params.vc.credentialSubject.nbf;
   credentialSubject.exp = event.params.vc.credentialSubject.exp;
   credentialSubject.save();

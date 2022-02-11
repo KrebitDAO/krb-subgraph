@@ -199,6 +199,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -693,6 +698,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -835,6 +845,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -954,6 +969,11 @@
               {
                 "internalType": "uint256",
                 "name": "stake",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
                 "type": "uint256"
               },
               {
@@ -1095,6 +1115,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -1150,6 +1175,32 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feePercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feesAvailableForWithdraw",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1294,6 +1345,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -1427,6 +1483,11 @@
               {
                 "internalType": "uint256",
                 "name": "stake",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
                 "type": "uint256"
               },
               {
@@ -1776,6 +1837,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -1835,7 +1901,7 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -1974,6 +2040,11 @@
               {
                 "internalType": "uint256",
                 "name": "stake",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
                 "type": "uint256"
               },
               {
@@ -2139,6 +2210,11 @@
               },
               {
                 "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
                 "name": "nbf",
                 "type": "uint256"
               },
@@ -2291,6 +2367,19 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "newFeePercentage",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateFeePercentage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "newMinBalance",
         "type": "uint256"
       }
@@ -2373,6 +2462,24 @@
     "name": "upgradeToAndCall",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

@@ -23,7 +23,7 @@ Total supply and biggest token holders:
 
 ```GraphQL
 {
-  erc20Contract(id: "0x7567a8ef8aecdb98504ebb8fb9b1e9ff14de7384") {
+  erc20Contract(id: "0x84a0F5D8132d2e1FC0859Aba800462e43c80c484") {
     totalSupply {
       value
     }

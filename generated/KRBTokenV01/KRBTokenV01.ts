@@ -237,12 +237,16 @@ export class IssuedVcCredentialSubjectStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -553,12 +557,16 @@ export class KRBTokenV01__deleteVCInputVcCredentialSubjectStruct extends ethereu
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -649,12 +657,16 @@ export class KRBTokenV01__disputeVCByGovernInputVcCredentialSubjectStruct extend
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -745,12 +757,16 @@ export class KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSubjectStruct
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -841,12 +857,16 @@ export class KRBTokenV01__expiredVCInputVcCredentialSubjectStruct extends ethere
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -937,12 +957,16 @@ export class KRBTokenV01__getUuidInputVcCredentialSubjectStruct extends ethereum
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -1033,112 +1057,20 @@ export class KRBTokenV01__getVCStatusInputVcCredentialSubjectStruct extends ethe
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
 export class KRBTokenV01__getVCStatusInputVcCredentialSchemaStruct extends ethereum.Tuple {
-  get id(): string {
-    return this[0].toString();
-  }
-
-  get _type(): string {
-    return this[1].toString();
-  }
-}
-
-export class KRBTokenV01__registerVCInputVcStruct extends ethereum.Tuple {
-  get _context(): string {
-    return this[0].toString();
-  }
-
-  get _type(): string {
-    return this[1].toString();
-  }
-
-  get id(): string {
-    return this[2].toString();
-  }
-
-  get issuer(): KRBTokenV01__registerVCInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__registerVCInputVcIssuerStruct;
-  }
-
-  get credentialSubject(): KRBTokenV01__registerVCInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__registerVCInputVcCredentialSubjectStruct;
-  }
-
-  get credentialSchema(): KRBTokenV01__registerVCInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__registerVCInputVcCredentialSchemaStruct;
-  }
-
-  get issuanceDate(): string {
-    return this[6].toString();
-  }
-
-  get expirationDate(): string {
-    return this[7].toString();
-  }
-}
-
-export class KRBTokenV01__registerVCInputVcIssuerStruct extends ethereum.Tuple {
-  get id(): string {
-    return this[0].toString();
-  }
-
-  get ethereumAddress(): Address {
-    return this[1].toAddress();
-  }
-}
-
-export class KRBTokenV01__registerVCInputVcCredentialSubjectStruct extends ethereum.Tuple {
-  get id(): string {
-    return this[0].toString();
-  }
-
-  get ethereumAddress(): Address {
-    return this[1].toAddress();
-  }
-
-  get _type(): string {
-    return this[2].toString();
-  }
-
-  get typeSchema(): string {
-    return this[3].toString();
-  }
-
-  get value(): string {
-    return this[4].toString();
-  }
-
-  get encrypted(): string {
-    return this[5].toString();
-  }
-
-  get trust(): i32 {
-    return this[6].toI32();
-  }
-
-  get stake(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get nbf(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get exp(): BigInt {
-    return this[9].toBigInt();
-  }
-}
-
-export class KRBTokenV01__registerVCInputVcCredentialSchemaStruct extends ethereum.Tuple {
   get id(): string {
     return this[0].toString();
   }
@@ -1245,12 +1177,16 @@ export class KRBTokenV01__revokeVCInputVcCredentialSubjectStruct extends ethereu
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -1341,12 +1277,16 @@ export class KRBTokenV01__suspendVCInputVcCredentialSubjectStruct extends ethere
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -1539,7 +1479,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   deleteVC(vc: KRBTokenV01__deleteVCInputVcStruct, reason: string): boolean {
     let result = super.call(
       "deleteVC",
-      "deleteVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
+      "deleteVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromString(reason)]
     );
 
@@ -1552,7 +1492,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "deleteVC",
-      "deleteVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
+      "deleteVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromString(reason)]
     );
     if (result.reverted) {
@@ -1568,7 +1508,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): boolean {
     let result = super.call(
       "disputeVCByGovern",
-      "disputeVCByGovern((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(bool)",
+      "disputeVCByGovern((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromTuple(disputeVC)]
     );
 
@@ -1581,7 +1521,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "disputeVCByGovern",
-      "disputeVCByGovern((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(bool)",
+      "disputeVCByGovern((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromTuple(disputeVC)]
     );
     if (result.reverted) {
@@ -1594,7 +1534,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   expiredVC(vc: KRBTokenV01__expiredVCInputVcStruct): boolean {
     let result = super.call(
       "expiredVC",
-      "expiredVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(bool)",
+      "expiredVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bool)",
       [ethereum.Value.fromTuple(vc)]
     );
 
@@ -1606,7 +1546,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "expiredVC",
-      "expiredVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(bool)",
+      "expiredVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bool)",
       [ethereum.Value.fromTuple(vc)]
     );
     if (result.reverted) {
@@ -1614,6 +1554,48 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  feePercentage(): BigInt {
+    let result = super.call("feePercentage", "feePercentage():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_feePercentage(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "feePercentage",
+      "feePercentage():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  feesAvailableForWithdraw(): BigInt {
+    let result = super.call(
+      "feesAvailableForWithdraw",
+      "feesAvailableForWithdraw():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_feesAvailableForWithdraw(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "feesAvailableForWithdraw",
+      "feesAvailableForWithdraw():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getRoleAdmin(role: Bytes): Bytes {
@@ -1692,7 +1674,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   getUuid(vc: KRBTokenV01__getUuidInputVcStruct): Bytes {
     let result = super.call(
       "getUuid",
-      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(bytes32)",
+      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bytes32)",
       [ethereum.Value.fromTuple(vc)]
     );
 
@@ -1704,7 +1686,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
       "getUuid",
-      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(bytes32)",
+      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bytes32)",
       [ethereum.Value.fromTuple(vc)]
     );
     if (result.reverted) {
@@ -1717,7 +1699,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   getVCStatus(vc: KRBTokenV01__getVCStatusInputVcStruct): string {
     let result = super.call(
       "getVCStatus",
-      "getVCStatus((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(string)",
+      "getVCStatus((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(string)",
       [ethereum.Value.fromTuple(vc)]
     );
 
@@ -1729,7 +1711,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<string> {
     let result = super.tryCall(
       "getVCStatus",
-      "getVCStatus((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string)):(string)",
+      "getVCStatus((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(string)",
       [ethereum.Value.fromTuple(vc)]
     );
     if (result.reverted) {
@@ -1960,35 +1942,6 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  registerVC(
-    vc: KRBTokenV01__registerVCInputVcStruct,
-    proofValue: Bytes
-  ): boolean {
-    let result = super.call(
-      "registerVC",
-      "registerVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),bytes):(bool)",
-      [ethereum.Value.fromTuple(vc), ethereum.Value.fromBytes(proofValue)]
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_registerVC(
-    vc: KRBTokenV01__registerVCInputVcStruct,
-    proofValue: Bytes
-  ): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "registerVC",
-      "registerVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),bytes):(bool)",
-      [ethereum.Value.fromTuple(vc), ethereum.Value.fromBytes(proofValue)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   registry(param0: Bytes): KRBTokenV01__registryResult {
     let result = super.call("registry", "registry(bytes32):(uint8,bytes32)", [
       ethereum.Value.fromFixedBytes(param0)
@@ -2020,7 +1973,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   revokeVC(vc: KRBTokenV01__revokeVCInputVcStruct, reason: string): boolean {
     let result = super.call(
       "revokeVC",
-      "revokeVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
+      "revokeVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromString(reason)]
     );
 
@@ -2033,7 +1986,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "revokeVC",
-      "revokeVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
+      "revokeVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromString(reason)]
     );
     if (result.reverted) {
@@ -2069,7 +2022,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   suspendVC(vc: KRBTokenV01__suspendVCInputVcStruct, reason: string): boolean {
     let result = super.call(
       "suspendVC",
-      "suspendVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
+      "suspendVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromString(reason)]
     );
 
@@ -2082,7 +2035,7 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "suspendVC",
-      "suspendVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
+      "suspendVC((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string),string):(bool)",
       [ethereum.Value.fromTuple(vc), ethereum.Value.fromString(reason)]
     );
     if (result.reverted) {
@@ -2463,12 +2416,16 @@ export class DeleteVCCallVcCredentialSubjectStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -2597,12 +2554,16 @@ export class DisputeVCByGovernCallVcCredentialSubjectStruct extends ethereum.Tup
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -2693,12 +2654,16 @@ export class DisputeVCByGovernCallDisputeVCCredentialSubjectStruct extends ether
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -2823,12 +2788,16 @@ export class ExpiredVCCallVcCredentialSubjectStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -3115,12 +3084,16 @@ export class RegisterVCCallVcCredentialSubjectStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -3317,12 +3290,16 @@ export class RevokeVCCallVcCredentialSubjectStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -3451,12 +3428,16 @@ export class SuspendVCCallVcCredentialSubjectStruct extends ethereum.Tuple {
     return this[7].toBigInt();
   }
 
-  get nbf(): BigInt {
+  get price(): BigInt {
     return this[8].toBigInt();
   }
 
-  get exp(): BigInt {
+  get nbf(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get exp(): BigInt {
+    return this[10].toBigInt();
   }
 }
 
@@ -3572,6 +3553,36 @@ export class UnpauseCall__Outputs {
   _call: UnpauseCall;
 
   constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateFeePercentageCall extends ethereum.Call {
+  get inputs(): UpdateFeePercentageCall__Inputs {
+    return new UpdateFeePercentageCall__Inputs(this);
+  }
+
+  get outputs(): UpdateFeePercentageCall__Outputs {
+    return new UpdateFeePercentageCall__Outputs(this);
+  }
+}
+
+export class UpdateFeePercentageCall__Inputs {
+  _call: UpdateFeePercentageCall;
+
+  constructor(call: UpdateFeePercentageCall) {
+    this._call = call;
+  }
+
+  get newFeePercentage(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class UpdateFeePercentageCall__Outputs {
+  _call: UpdateFeePercentageCall;
+
+  constructor(call: UpdateFeePercentageCall) {
     this._call = call;
   }
 }
@@ -3760,6 +3771,40 @@ export class UpgradeToAndCallCall__Outputs {
   _call: UpgradeToAndCallCall;
 
   constructor(call: UpgradeToAndCallCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawFeesCall extends ethereum.Call {
+  get inputs(): WithdrawFeesCall__Inputs {
+    return new WithdrawFeesCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawFeesCall__Outputs {
+    return new WithdrawFeesCall__Outputs(this);
+  }
+}
+
+export class WithdrawFeesCall__Inputs {
+  _call: WithdrawFeesCall;
+
+  constructor(call: WithdrawFeesCall) {
+    this._call = call;
+  }
+
+  get _to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _amount(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class WithdrawFeesCall__Outputs {
+  _call: WithdrawFeesCall;
+
+  constructor(call: WithdrawFeesCall) {
     this._call = call;
   }
 }

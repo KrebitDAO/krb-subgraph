@@ -1439,6 +1439,15 @@ export class CredentialSubject extends Entity {
     this.set("stake", Value.fromBigInt(value));
   }
 
+  get price(): BigInt {
+    let value = this.get("price");
+    return value.toBigInt();
+  }
+
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
+  }
+
   get nbf(): BigInt {
     let value = this.get("nbf");
     return value.toBigInt();

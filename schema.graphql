@@ -142,6 +142,7 @@ type CredentialSubject @entity {
   encrypted: String
   trust: Int!
   stake: BigInt!
+  price: BigInt!
   nbf: BigInt!
   exp: BigInt!
 }

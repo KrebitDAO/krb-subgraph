@@ -6,9 +6,9 @@ dataSources:
     name: KRBTokenV01
     network: rinkeby
     source:
-      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      address: "0x84a0F5D8132d2e1FC0859Aba800462e43c80c484"
       abi: KRBTokenV01
-      startBlock: 10044457
+      startBlock: 10147314
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -29,7 +29,7 @@ dataSources:
           handler: handleDisputed
         - event: Expired(bytes32)
           handler: handleExpired
-        - event: Issued(bytes32,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256),(string,string),string,string))
+        - event: Issued(bytes32,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string))
           handler: handleIssued
         - event: Revoked(bytes32,string)
           handler: handleRevoked
@@ -42,9 +42,9 @@ dataSources:
     name: erc20
     network: rinkeby
     source:
-      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      address: "0x84a0F5D8132d2e1FC0859Aba800462e43c80c484"
       abi: IERC20
-      startBlock: 10044457
+      startBlock: 10147314
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,9 +64,9 @@ dataSources:
     name: pausable
     network: rinkeby
     source:
-      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      address: "0x84a0F5D8132d2e1FC0859Aba800462e43c80c484"
       abi: Pausable
-      startBlock: 10044457
+      startBlock: 10147314
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -86,9 +86,9 @@ dataSources:
     name: accesscontrol
     network: rinkeby
     source:
-      address: "0x7567A8eF8AECdb98504eBB8fb9B1e9Ff14dE7384"
+      address: "0x84a0F5D8132d2e1FC0859Aba800462e43c80c484"
       abi: AccessControl
-      startBlock: 10044457
+      startBlock: 10147314
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
