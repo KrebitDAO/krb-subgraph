@@ -172,6 +172,7 @@ type VerifiableCredential @entity {
 
 type CredentialRegistry @entity {
   id: ID!
+  dayUpdated: String
   balance: BigInt!
   issued: BigInt!
   revoked: BigInt!

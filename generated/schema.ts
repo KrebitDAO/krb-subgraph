@@ -1785,6 +1785,23 @@ export class CredentialRegistry extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get dayUpdated(): string | null {
+    let value = this.get("dayUpdated");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set dayUpdated(value: string | null) {
+    if (value === null) {
+      this.unset("dayUpdated");
+    } else {
+      this.set("dayUpdated", Value.fromString(value as string));
+    }
+  }
+
   get balance(): BigInt {
     let value = this.get("balance");
     return value.toBigInt();

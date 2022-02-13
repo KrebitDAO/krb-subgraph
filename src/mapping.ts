@@ -21,23 +21,22 @@ import { constants } from "@amxx/graphprotocol-utils";
 
 import { log } from "@graphprotocol/graph-ts";
 
-export function fetchYesterdayCredentialRegistry(
-  day: BigInt
+export function fetchLastDayCredentialRegistry(
+  lastDay: String
 ): CredentialRegistry {
-  let yesterday = day.minus(BigInt.fromI32(1));
-  let yesterdayRegistry = CredentialRegistry.load(yesterday.toString());
-  if (yesterdayRegistry == null) {
-    yesterdayRegistry = new CredentialRegistry(yesterday.toString());
-    yesterdayRegistry.issued = BigInt.fromI32(0);
-    yesterdayRegistry.deleted = BigInt.fromI32(0);
-    yesterdayRegistry.disputed = BigInt.fromI32(0);
-    yesterdayRegistry.expired = BigInt.fromI32(0);
-    yesterdayRegistry.revoked = BigInt.fromI32(0);
-    yesterdayRegistry.suspended = BigInt.fromI32(0);
-    yesterdayRegistry.balance = BigInt.fromI32(0);
+  let lastDayRegistry = CredentialRegistry.load(lastDay.toString());
+  if (lastDayRegistry == null) {
+    lastDayRegistry = new CredentialRegistry(lastDay.toString());
+    lastDayRegistry.issued = BigInt.fromI32(0);
+    lastDayRegistry.deleted = BigInt.fromI32(0);
+    lastDayRegistry.disputed = BigInt.fromI32(0);
+    lastDayRegistry.expired = BigInt.fromI32(0);
+    lastDayRegistry.revoked = BigInt.fromI32(0);
+    lastDayRegistry.suspended = BigInt.fromI32(0);
+    lastDayRegistry.balance = BigInt.fromI32(0);
   }
 
-  return yesterdayRegistry as CredentialRegistry;
+  return lastDayRegistry as CredentialRegistry;
 }
 
 export function handleIssued(event: Issued): void {
@@ -101,25 +100,29 @@ export function handleIssued(event: Issued): void {
   // Entities can be written to the store with `.save()`
   vc.save();
 
+  let totalRegistry = CredentialRegistry.load("total");
+  totalRegistry.issued = totalRegistry.issued.plus(BigInt.fromI32(1));
+
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
-    dailyRegistry.issued = yesterdayRegistry.issued.plus(BigInt.fromI32(1));
-    dailyRegistry.deleted = yesterdayRegistry.deleted;
-    dailyRegistry.disputed = yesterdayRegistry.disputed;
-    dailyRegistry.expired = yesterdayRegistry.expired;
-    dailyRegistry.revoked = yesterdayRegistry.revoked;
-    dailyRegistry.suspended = yesterdayRegistry.suspended;
-    dailyRegistry.balance = yesterdayRegistry.balance;
+    dailyRegistry.issued = lastDayRegistry.issued.plus(BigInt.fromI32(1));
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.balance = lastDayRegistry.balance;
   } else {
     dailyRegistry.issued = dailyRegistry.issued.plus(BigInt.fromI32(1));
   }
   dailyRegistry.save();
 
-  let totalRegistry = CredentialRegistry.load("total");
-  totalRegistry.issued = totalRegistry.issued.plus(BigInt.fromI32(1));
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 
   // Note: If a handler doesn't require existing field values, it is faster
@@ -188,23 +191,6 @@ export function handleDeleted(event: Deleted): void {
 
   vc.save();
 
-  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
-  let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
-  if (dailyRegistry == null) {
-    dailyRegistry = new CredentialRegistry(day.toString());
-    dailyRegistry.issued = yesterdayRegistry.issued;
-    dailyRegistry.deleted = yesterdayRegistry.deleted.plus(BigInt.fromI32(1));
-    dailyRegistry.disputed = yesterdayRegistry.disputed;
-    dailyRegistry.expired = yesterdayRegistry.expired;
-    dailyRegistry.revoked = yesterdayRegistry.revoked;
-    dailyRegistry.suspended = yesterdayRegistry.suspended;
-    dailyRegistry.balance = yesterdayRegistry.balance;
-  } else {
-    dailyRegistry.deleted = dailyRegistry.deleted.plus(BigInt.fromI32(1));
-  }
-  dailyRegistry.save();
-
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
@@ -212,6 +198,27 @@ export function handleDeleted(event: Deleted): void {
   } else {
     totalRegistry.deleted = totalRegistry.deleted.plus(BigInt.fromI32(1));
   }
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted.plus(BigInt.fromI32(1));
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.balance = lastDayRegistry.balance;
+  } else {
+    dailyRegistry.deleted = dailyRegistry.deleted.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 }
 
@@ -224,23 +231,6 @@ export function handleDisputed(event: Disputed): void {
 
   vc.save();
 
-  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
-  let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
-  if (dailyRegistry == null) {
-    dailyRegistry = new CredentialRegistry(day.toString());
-    dailyRegistry.issued = yesterdayRegistry.issued;
-    dailyRegistry.deleted = yesterdayRegistry.deleted;
-    dailyRegistry.disputed = yesterdayRegistry.disputed.plus(BigInt.fromI32(1));
-    dailyRegistry.expired = yesterdayRegistry.expired;
-    dailyRegistry.revoked = yesterdayRegistry.revoked;
-    dailyRegistry.suspended = yesterdayRegistry.suspended;
-    dailyRegistry.balance = yesterdayRegistry.balance;
-  } else {
-    dailyRegistry.disputed = dailyRegistry.disputed.plus(BigInt.fromI32(1));
-  }
-  dailyRegistry.save();
-
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
@@ -248,6 +238,27 @@ export function handleDisputed(event: Disputed): void {
   } else {
     totalRegistry.disputed = totalRegistry.disputed.plus(BigInt.fromI32(1));
   }
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed.plus(BigInt.fromI32(1));
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.balance = lastDayRegistry.balance;
+  } else {
+    dailyRegistry.disputed = dailyRegistry.disputed.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 }
 
@@ -259,23 +270,6 @@ export function handleExpired(event: Expired): void {
 
   vc.save();
 
-  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
-  let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
-  if (dailyRegistry == null) {
-    dailyRegistry = new CredentialRegistry(day.toString());
-    dailyRegistry.issued = yesterdayRegistry.issued;
-    dailyRegistry.deleted = yesterdayRegistry.deleted;
-    dailyRegistry.disputed = yesterdayRegistry.disputed;
-    dailyRegistry.expired = yesterdayRegistry.expired.plus(BigInt.fromI32(1));
-    dailyRegistry.revoked = yesterdayRegistry.revoked;
-    dailyRegistry.suspended = yesterdayRegistry.suspended;
-    dailyRegistry.balance = yesterdayRegistry.balance;
-  } else {
-    dailyRegistry.expired = dailyRegistry.expired.plus(BigInt.fromI32(1));
-  }
-  dailyRegistry.save();
-
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
@@ -283,6 +277,27 @@ export function handleExpired(event: Expired): void {
   } else {
     totalRegistry.expired = totalRegistry.expired.plus(BigInt.fromI32(1));
   }
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired.plus(BigInt.fromI32(1));
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.balance = lastDayRegistry.balance;
+  } else {
+    dailyRegistry.expired = dailyRegistry.expired.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 }
 
@@ -295,23 +310,6 @@ export function handleRevoked(event: Revoked): void {
 
   vc.save();
 
-  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
-  let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
-  if (dailyRegistry == null) {
-    dailyRegistry = new CredentialRegistry(day.toString());
-    dailyRegistry.issued = yesterdayRegistry.issued;
-    dailyRegistry.deleted = yesterdayRegistry.deleted;
-    dailyRegistry.disputed = yesterdayRegistry.disputed;
-    dailyRegistry.expired = yesterdayRegistry.expired;
-    dailyRegistry.revoked = yesterdayRegistry.revoked.plus(BigInt.fromI32(1));
-    dailyRegistry.suspended = yesterdayRegistry.suspended;
-    dailyRegistry.balance = yesterdayRegistry.balance;
-  } else {
-    dailyRegistry.revoked = dailyRegistry.revoked.plus(BigInt.fromI32(1));
-  }
-  dailyRegistry.save();
-
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
@@ -319,6 +317,27 @@ export function handleRevoked(event: Revoked): void {
   } else {
     totalRegistry.revoked = totalRegistry.revoked.plus(BigInt.fromI32(1));
   }
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked.plus(BigInt.fromI32(1));
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.balance = lastDayRegistry.balance;
+  } else {
+    dailyRegistry.revoked = dailyRegistry.revoked.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 }
 
@@ -331,25 +350,6 @@ export function handleSuspended(event: Suspended): void {
 
   vc.save();
 
-  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
-  let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
-  if (dailyRegistry == null) {
-    dailyRegistry = new CredentialRegistry(day.toString());
-    dailyRegistry.issued = yesterdayRegistry.issued;
-    dailyRegistry.deleted = yesterdayRegistry.deleted;
-    dailyRegistry.disputed = yesterdayRegistry.disputed;
-    dailyRegistry.expired = yesterdayRegistry.expired;
-    dailyRegistry.revoked = yesterdayRegistry.revoked;
-    dailyRegistry.suspended = yesterdayRegistry.suspended.plus(
-      BigInt.fromI32(1)
-    );
-    dailyRegistry.balance = yesterdayRegistry.balance;
-  } else {
-    dailyRegistry.suspended = dailyRegistry.suspended.plus(BigInt.fromI32(1));
-  }
-  dailyRegistry.save();
-
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
@@ -357,41 +357,31 @@ export function handleSuspended(event: Suspended): void {
   } else {
     totalRegistry.suspended = totalRegistry.suspended.plus(BigInt.fromI32(1));
   }
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended.plus(BigInt.fromI32(1));
+    dailyRegistry.balance = lastDayRegistry.balance;
+  } else {
+    dailyRegistry.suspended = dailyRegistry.suspended.plus(BigInt.fromI32(1));
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 }
 
 export function handleTransfer(event: Transfer): void {
-  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
-  let dailyRegistry = CredentialRegistry.load(day.toString());
-  let yesterdayRegistry = fetchYesterdayCredentialRegistry(day);
-  if (dailyRegistry == null) {
-    dailyRegistry = new CredentialRegistry(day.toString());
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
-      dailyRegistry.balance = yesterdayRegistry.balance.plus(
-        event.params.value
-      );
-    }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
-      dailyRegistry.balance = yesterdayRegistry.balance.minus(
-        event.params.value
-      );
-    }
-    dailyRegistry.issued = yesterdayRegistry.issued;
-    dailyRegistry.deleted = yesterdayRegistry.deleted;
-    dailyRegistry.disputed = yesterdayRegistry.disputed;
-    dailyRegistry.expired = yesterdayRegistry.expired;
-    dailyRegistry.revoked = yesterdayRegistry.revoked;
-    dailyRegistry.suspended = yesterdayRegistry.suspended;
-  } else {
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
-      dailyRegistry.balance = dailyRegistry.balance.plus(event.params.value);
-    }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
-      dailyRegistry.balance = dailyRegistry.balance.minus(event.params.value);
-    }
-  }
-  dailyRegistry.save();
-
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
@@ -416,5 +406,35 @@ export function handleTransfer(event: Transfer): void {
     }
   }
 
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = lastDayRegistry.balance.plus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = lastDayRegistry.balance.minus(event.params.value);
+    }
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+  } else {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = dailyRegistry.balance.plus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.balance = dailyRegistry.balance.minus(event.params.value);
+    }
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
   totalRegistry.save();
 }
