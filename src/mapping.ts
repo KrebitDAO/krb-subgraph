@@ -8,6 +8,7 @@ import {
   Revoked,
   Suspended,
   Transfer,
+  Staked,
 } from "../generated/KRBTokenV01/KRBTokenV01";
 import {
   Issuer,
@@ -34,6 +35,7 @@ export function fetchLastDayCredentialRegistry(
     lastDayRegistry.revoked = BigInt.fromI32(0);
     lastDayRegistry.suspended = BigInt.fromI32(0);
     lastDayRegistry.balance = BigInt.fromI32(0);
+    lastDayRegistry.staked = BigInt.fromI32(0);
   }
 
   return lastDayRegistry as CredentialRegistry;
@@ -117,6 +119,7 @@ export function handleIssued(event: Issued): void {
     dailyRegistry.revoked = lastDayRegistry.revoked;
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     dailyRegistry.issued = dailyRegistry.issued.plus(BigInt.fromI32(1));
   }
@@ -213,6 +216,7 @@ export function handleDeleted(event: Deleted): void {
     dailyRegistry.revoked = lastDayRegistry.revoked;
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     dailyRegistry.deleted = dailyRegistry.deleted.plus(BigInt.fromI32(1));
   }
@@ -253,6 +257,7 @@ export function handleDisputed(event: Disputed): void {
     dailyRegistry.revoked = lastDayRegistry.revoked;
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     dailyRegistry.disputed = dailyRegistry.disputed.plus(BigInt.fromI32(1));
   }
@@ -292,6 +297,7 @@ export function handleExpired(event: Expired): void {
     dailyRegistry.revoked = lastDayRegistry.revoked;
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     dailyRegistry.expired = dailyRegistry.expired.plus(BigInt.fromI32(1));
   }
@@ -332,6 +338,7 @@ export function handleRevoked(event: Revoked): void {
     dailyRegistry.revoked = lastDayRegistry.revoked.plus(BigInt.fromI32(1));
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     dailyRegistry.revoked = dailyRegistry.revoked.plus(BigInt.fromI32(1));
   }
@@ -372,6 +379,7 @@ export function handleSuspended(event: Suspended): void {
     dailyRegistry.revoked = lastDayRegistry.revoked;
     dailyRegistry.suspended = lastDayRegistry.suspended.plus(BigInt.fromI32(1));
     dailyRegistry.balance = lastDayRegistry.balance;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     dailyRegistry.suspended = dailyRegistry.suspended.plus(BigInt.fromI32(1));
   }
@@ -397,6 +405,7 @@ export function handleTransfer(event: Transfer): void {
     totalRegistry.expired = BigInt.fromI32(0);
     totalRegistry.revoked = BigInt.fromI32(0);
     totalRegistry.suspended = BigInt.fromI32(0);
+    totalRegistry.staked = BigInt.fromI32(0);
   } else {
     if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
       totalRegistry.balance = totalRegistry.balance.plus(event.params.value);
@@ -425,12 +434,66 @@ export function handleTransfer(event: Transfer): void {
     dailyRegistry.expired = lastDayRegistry.expired;
     dailyRegistry.revoked = lastDayRegistry.revoked;
     dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.staked = lastDayRegistry.staked;
   } else {
     if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
       dailyRegistry.balance = dailyRegistry.balance.plus(event.params.value);
     }
     if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
       dailyRegistry.balance = dailyRegistry.balance.minus(event.params.value);
+    }
+  }
+  dailyRegistry.save();
+
+  totalRegistry.dayUpdated = day.toString();
+  totalRegistry.save();
+}
+
+export function handleStaked(event: Staked): void {
+  let totalRegistry = CredentialRegistry.load("total");
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.staked = event.params.value.neg();
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.staked = event.params.value;
+    }
+  } else {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.staked = totalRegistry.staked.minus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      totalRegistry.staked = totalRegistry.staked.plus(event.params.value);
+    }
+  }
+
+  let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
+  let dailyRegistry = CredentialRegistry.load(day.toString());
+  let lastDayRegistry = fetchLastDayCredentialRegistry(
+    totalRegistry.dayUpdated
+  );
+  if (dailyRegistry == null) {
+    dailyRegistry = new CredentialRegistry(day.toString());
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.staked = lastDayRegistry.staked.minus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.staked = lastDayRegistry.staked.plus(event.params.value);
+    }
+    dailyRegistry.issued = lastDayRegistry.issued;
+    dailyRegistry.deleted = lastDayRegistry.deleted;
+    dailyRegistry.disputed = lastDayRegistry.disputed;
+    dailyRegistry.expired = lastDayRegistry.expired;
+    dailyRegistry.revoked = lastDayRegistry.revoked;
+    dailyRegistry.suspended = lastDayRegistry.suspended;
+    dailyRegistry.balance = lastDayRegistry.balance;
+  } else {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.staked = dailyRegistry.staked.minus(event.params.value);
+    }
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+      dailyRegistry.staked = dailyRegistry.staked.plus(event.params.value);
     }
   }
   dailyRegistry.save();

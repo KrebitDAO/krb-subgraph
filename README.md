@@ -1,15 +1,15 @@
 # <img src="krebit-icon.png" alt="Krebit" height="40px" align="left"> Krebit Subgraph
 
-[![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-blue)](https://docs.krebit.co)
+[![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-blue)](https://docs.krebit.id)
 
 This repository hosts the [Krebit] protocol subgraph, based on [OpenZeppelin subgraphs].
 
-[krebit]: http://krebit.co
+[krebit]: http://krebit.id
 [openzeppelin subgraphs]: https://docs.openzeppelin.com/subgraphs/0.1.x/
 
 ## Overview
 
-### URLs
+### Rinkeby URLs
 
 Explorer: https://thegraph.com/hosted-service/subgraph/krebit/krb-token-v01
 

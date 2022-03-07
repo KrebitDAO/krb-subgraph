@@ -1811,6 +1811,15 @@ export class CredentialRegistry extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 
+  get staked(): BigInt {
+    let value = this.get("staked");
+    return value.toBigInt();
+  }
+
+  set staked(value: BigInt) {
+    this.set("staked", Value.fromBigInt(value));
+  }
+
   get issued(): BigInt {
     let value = this.get("issued");
     return value.toBigInt();

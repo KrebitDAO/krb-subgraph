@@ -378,6 +378,32 @@ export class RoleRevoked__Params {
   }
 }
 
+export class Staked extends ethereum.Event {
+  get params(): Staked__Params {
+    return new Staked__Params(this);
+  }
+}
+
+export class Staked__Params {
+  _event: Staked;
+
+  constructor(event: Staked) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get value(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
 export class Suspended extends ethereum.Event {
   get params(): Suspended__Params {
     return new Suspended__Params(this);
@@ -1889,6 +1915,29 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  minPriceToIssue(): BigInt {
+    let result = super.call(
+      "minPriceToIssue",
+      "minPriceToIssue():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_minPriceToIssue(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "minPriceToIssue",
+      "minPriceToIssue():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   minStakeToIssue(): BigInt {
     let result = super.call(
       "minStakeToIssue",
@@ -1994,6 +2043,25 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  stakeOf(issuer: Address): BigInt {
+    let result = super.call("stakeOf", "stakeOf(address):(uint256)", [
+      ethereum.Value.fromAddress(issuer)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_stakeOf(issuer: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("stakeOf", "stakeOf(address):(uint256)", [
+      ethereum.Value.fromAddress(issuer)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   supportsInterface(interfaceId: Bytes): boolean {
@@ -2259,6 +2327,40 @@ export class BurnFromCall__Outputs {
   _call: BurnFromCall;
 
   constructor(call: BurnFromCall) {
+    this._call = call;
+  }
+}
+
+export class BurnStakeCall extends ethereum.Call {
+  get inputs(): BurnStakeCall__Inputs {
+    return new BurnStakeCall__Inputs(this);
+  }
+
+  get outputs(): BurnStakeCall__Outputs {
+    return new BurnStakeCall__Outputs(this);
+  }
+}
+
+export class BurnStakeCall__Inputs {
+  _call: BurnStakeCall;
+
+  constructor(call: BurnStakeCall) {
+    this._call = call;
+  }
+
+  get issuer(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get stake(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class BurnStakeCall__Outputs {
+  _call: BurnStakeCall;
+
+  constructor(call: BurnStakeCall) {
     this._call = call;
   }
 }
@@ -3673,6 +3775,36 @@ export class UpdateMinBalanceToTransferCall__Outputs {
   _call: UpdateMinBalanceToTransferCall;
 
   constructor(call: UpdateMinBalanceToTransferCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateMinPriceToIssueCall extends ethereum.Call {
+  get inputs(): UpdateMinPriceToIssueCall__Inputs {
+    return new UpdateMinPriceToIssueCall__Inputs(this);
+  }
+
+  get outputs(): UpdateMinPriceToIssueCall__Outputs {
+    return new UpdateMinPriceToIssueCall__Outputs(this);
+  }
+}
+
+export class UpdateMinPriceToIssueCall__Inputs {
+  _call: UpdateMinPriceToIssueCall;
+
+  constructor(call: UpdateMinPriceToIssueCall) {
+    this._call = call;
+  }
+
+  get newMinPrice(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class UpdateMinPriceToIssueCall__Outputs {
+  _call: UpdateMinPriceToIssueCall;
+
+  constructor(call: UpdateMinPriceToIssueCall) {
     this._call = call;
   }
 }
