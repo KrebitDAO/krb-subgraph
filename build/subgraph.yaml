@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: KRBTokenV01
-    network: rinkeby
+    network: xdai
     source:
-      address: "0xA88d4F9ce30031d10817592F18D36363D9B46be8"
+      address: "0x3F01060d9c5ddC855B5DD1db5aE70204D37e3E7E"
       abi: KRBTokenV01
-      startBlock: 10284642
+      startBlock: 21232010
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -42,11 +42,11 @@ dataSources:
       file: KRBTokenV01/KRBTokenV01.wasm
   - kind: ethereum/contract
     name: erc20
-    network: rinkeby
+    network: xdai
     source:
-      address: "0xA88d4F9ce30031d10817592F18D36363D9B46be8"
+      address: "0x3F01060d9c5ddC855B5DD1db5aE70204D37e3E7E"
       abi: IERC20
-      startBlock: 10284642
+      startBlock: 21232010
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,11 +64,11 @@ dataSources:
       file: erc20/erc20.wasm
   - kind: ethereum/contract
     name: pausable
-    network: rinkeby
+    network: xdai
     source:
-      address: "0xA88d4F9ce30031d10817592F18D36363D9B46be8"
+      address: "0x3F01060d9c5ddC855B5DD1db5aE70204D37e3E7E"
       abi: Pausable
-      startBlock: 10284642
+      startBlock: 21232010
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -86,11 +86,11 @@ dataSources:
       file: pausable/pausable.wasm
   - kind: ethereum/contract
     name: accesscontrol
-    network: rinkeby
+    network: xdai
     source:
-      address: "0xA88d4F9ce30031d10817592F18D36363D9B46be8"
+      address: "0x3F01060d9c5ddC855B5DD1db5aE70204D37e3E7E"
       abi: AccessControl
-      startBlock: 10284642
+      startBlock: 21232010
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
