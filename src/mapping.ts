@@ -58,7 +58,7 @@ export function handleIssued(event: Issued): void {
   issuer.save();
 
   let credentialSubject = new CredentialSubject(
-    event.params.vc.credentialSubject.id
+    event.params.uuid.toHexString()
   );
   credentialSubject.ethereumAddress =
     event.params.vc.credentialSubject.ethereumAddress;
