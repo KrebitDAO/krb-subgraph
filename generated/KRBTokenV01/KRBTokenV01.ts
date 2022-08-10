@@ -89,8 +89,8 @@ export class Deleted__Params {
     this._event = event;
   }
 
-  get uuid(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get uuid(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get reason(): string {
@@ -111,12 +111,12 @@ export class Disputed__Params {
     this._event = event;
   }
 
-  get uuid(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get uuid(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
-  get disputedBy(): Bytes {
-    return this._event.parameters[1].value.toBytes();
+  get disputedBy(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -133,8 +133,26 @@ export class Expired__Params {
     this._event = event;
   }
 
-  get uuid(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get uuid(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get version(): i32 {
+    return this._event.parameters[0].value.toI32();
   }
 }
 
@@ -151,8 +169,8 @@ export class Issued__Params {
     this._event = event;
   }
 
-  get uuid(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get uuid(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get vc(): IssuedVcStruct {
@@ -291,8 +309,8 @@ export class Revoked__Params {
     this._event = event;
   }
 
-  get uuid(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get uuid(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get reason(): string {
@@ -417,8 +435,8 @@ export class Suspended__Params {
     this._event = event;
   }
 
-  get uuid(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get uuid(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get reason(): string {
@@ -481,10 +499,6 @@ export class Updated__Params {
 
   constructor(event: Updated) {
     this._event = event;
-  }
-
-  get change(): string {
-    return this._event.parameters[0].value.toString();
   }
 }
 
@@ -1108,9 +1122,9 @@ export class KRBTokenV01__getVCStatusInputVcCredentialSchemaStruct extends ether
 
 export class KRBTokenV01__registryResult {
   value0: i32;
-  value1: Bytes;
+  value1: BigInt;
 
-  constructor(value0: i32, value1: Bytes) {
+  constructor(value0: i32, value1: BigInt) {
     this.value0 = value0;
     this.value1 = value1;
   }
@@ -1121,7 +1135,7 @@ export class KRBTokenV01__registryResult {
       "value0",
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value0))
     );
-    map.set("value1", ethereum.Value.fromFixedBytes(this.value1));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     return map;
   }
 }
@@ -1697,29 +1711,29 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getUuid(vc: KRBTokenV01__getUuidInputVcStruct): Bytes {
+  getUuid(vc: KRBTokenV01__getUuidInputVcStruct): BigInt {
     let result = super.call(
       "getUuid",
-      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bytes32)",
+      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(uint256)",
       [ethereum.Value.fromTuple(vc)]
     );
 
-    return result[0].toBytes();
+    return result[0].toBigInt();
   }
 
   try_getUuid(
     vc: KRBTokenV01__getUuidInputVcStruct
-  ): ethereum.CallResult<Bytes> {
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "getUuid",
-      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(bytes32)",
+      "getUuid((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(uint256)",
       [ethereum.Value.fromTuple(vc)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getVCStatus(vc: KRBTokenV01__getVCStatusInputVcStruct): string {
@@ -1739,29 +1753,6 @@ export class KRBTokenV01 extends ethereum.SmartContract {
       "getVCStatus",
       "getVCStatus((string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string)):(string)",
       [ethereum.Value.fromTuple(vc)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  getVCStatusByUUid(uuid: Bytes): string {
-    let result = super.call(
-      "getVCStatusByUUid",
-      "getVCStatusByUUid(bytes32):(string)",
-      [ethereum.Value.fromFixedBytes(uuid)]
-    );
-
-    return result[0].toString();
-  }
-
-  try_getVCStatusByUUid(uuid: Bytes): ethereum.CallResult<string> {
-    let result = super.tryCall(
-      "getVCStatusByUUid",
-      "getVCStatusByUUid(bytes32):(string)",
-      [ethereum.Value.fromFixedBytes(uuid)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1821,6 +1812,52 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isTrustedForwarder(forwarder: Address): boolean {
+    let result = super.call(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isTrustedForwarder(forwarder: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  maxPriceToIssue(): BigInt {
+    let result = super.call(
+      "maxPriceToIssue",
+      "maxPriceToIssue():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_maxPriceToIssue(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "maxPriceToIssue",
+      "maxPriceToIssue():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   maxStakeToIssue(): BigInt {
@@ -1991,31 +2028,69 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  registry(param0: Bytes): KRBTokenV01__registryResult {
-    let result = super.call("registry", "registry(bytes32):(uint8,bytes32)", [
-      ethereum.Value.fromFixedBytes(param0)
+  payments(dest: Address): BigInt {
+    let result = super.call("payments", "payments(address):(uint256)", [
+      ethereum.Value.fromAddress(dest)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_payments(dest: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("payments", "payments(address):(uint256)", [
+      ethereum.Value.fromAddress(dest)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  proxiableUUID(): Bytes {
+    let result = super.call("proxiableUUID", "proxiableUUID():(bytes32)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_proxiableUUID(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "proxiableUUID",
+      "proxiableUUID():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  registry(param0: BigInt): KRBTokenV01__registryResult {
+    let result = super.call("registry", "registry(uint256):(uint8,uint256)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
     ]);
 
     return new KRBTokenV01__registryResult(
       result[0].toI32(),
-      result[1].toBytes()
+      result[1].toBigInt()
     );
   }
 
   try_registry(
-    param0: Bytes
+    param0: BigInt
   ): ethereum.CallResult<KRBTokenV01__registryResult> {
     let result = super.tryCall(
       "registry",
-      "registry(bytes32):(uint8,bytes32)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      "registry(uint256):(uint8,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new KRBTokenV01__registryResult(value[0].toI32(), value[1].toBytes())
+      new KRBTokenV01__registryResult(value[0].toI32(), value[1].toBigInt())
     );
   }
 
@@ -2143,21 +2218,18 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  transfer(recipient: Address, amount: BigInt): boolean {
+  transfer(to: Address, amount: BigInt): boolean {
     let result = super.call("transfer", "transfer(address,uint256):(bool)", [
-      ethereum.Value.fromAddress(recipient),
+      ethereum.Value.fromAddress(to),
       ethereum.Value.fromUnsignedBigInt(amount)
     ]);
 
     return result[0].toBoolean();
   }
 
-  try_transfer(
-    recipient: Address,
-    amount: BigInt
-  ): ethereum.CallResult<boolean> {
+  try_transfer(to: Address, amount: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall("transfer", "transfer(address,uint256):(bool)", [
-      ethereum.Value.fromAddress(recipient),
+      ethereum.Value.fromAddress(to),
       ethereum.Value.fromUnsignedBigInt(amount)
     ]);
     if (result.reverted) {
@@ -2167,13 +2239,13 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  transferFrom(sender: Address, recipient: Address, amount: BigInt): boolean {
+  transferFrom(from: Address, to: Address, amount: BigInt): boolean {
     let result = super.call(
       "transferFrom",
       "transferFrom(address,address,uint256):(bool)",
       [
-        ethereum.Value.fromAddress(sender),
-        ethereum.Value.fromAddress(recipient),
+        ethereum.Value.fromAddress(from),
+        ethereum.Value.fromAddress(to),
         ethereum.Value.fromUnsignedBigInt(amount)
       ]
     );
@@ -2182,16 +2254,16 @@ export class KRBTokenV01 extends ethereum.SmartContract {
   }
 
   try_transferFrom(
-    sender: Address,
-    recipient: Address,
+    from: Address,
+    to: Address,
     amount: BigInt
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "transferFrom",
       "transferFrom(address,address,uint256):(bool)",
       [
-        ethereum.Value.fromAddress(sender),
-        ethereum.Value.fromAddress(recipient),
+        ethereum.Value.fromAddress(from),
+        ethereum.Value.fromAddress(to),
         ethereum.Value.fromUnsignedBigInt(amount)
       ]
     );
@@ -2200,32 +2272,6 @@ export class KRBTokenV01 extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-}
-
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
   }
 }
 
@@ -3001,6 +3047,18 @@ export class InitializeCall__Inputs {
   constructor(call: InitializeCall) {
     this._call = call;
   }
+
+  get name(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get symbol(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get version(): string {
+    return this._call.inputValues[2].value.toString();
+  }
 }
 
 export class InitializeCall__Outputs {
@@ -3570,7 +3628,7 @@ export class TransferCall__Inputs {
     this._call = call;
   }
 
-  get recipient(): Address {
+  get to(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
@@ -3608,11 +3666,11 @@ export class TransferFromCall__Inputs {
     this._call = call;
   }
 
-  get sender(): Address {
+  get from(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get recipient(): Address {
+  get to(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
@@ -3659,186 +3717,64 @@ export class UnpauseCall__Outputs {
   }
 }
 
-export class UpdateFeePercentageCall extends ethereum.Call {
-  get inputs(): UpdateFeePercentageCall__Inputs {
-    return new UpdateFeePercentageCall__Inputs(this);
+export class UpdateParametersCall extends ethereum.Call {
+  get inputs(): UpdateParametersCall__Inputs {
+    return new UpdateParametersCall__Inputs(this);
   }
 
-  get outputs(): UpdateFeePercentageCall__Outputs {
-    return new UpdateFeePercentageCall__Outputs(this);
+  get outputs(): UpdateParametersCall__Outputs {
+    return new UpdateParametersCall__Outputs(this);
   }
 }
 
-export class UpdateFeePercentageCall__Inputs {
-  _call: UpdateFeePercentageCall;
+export class UpdateParametersCall__Inputs {
+  _call: UpdateParametersCall;
 
-  constructor(call: UpdateFeePercentageCall) {
+  constructor(call: UpdateParametersCall) {
     this._call = call;
+  }
+
+  get newMinBalanceToTransfer(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get newMinBalanceToReceive(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get newMinBalanceToIssue(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
   }
 
   get newFeePercentage(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class UpdateFeePercentageCall__Outputs {
-  _call: UpdateFeePercentageCall;
-
-  constructor(call: UpdateFeePercentageCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateMinBalanceToIssueCall extends ethereum.Call {
-  get inputs(): UpdateMinBalanceToIssueCall__Inputs {
-    return new UpdateMinBalanceToIssueCall__Inputs(this);
-  }
-
-  get outputs(): UpdateMinBalanceToIssueCall__Outputs {
-    return new UpdateMinBalanceToIssueCall__Outputs(this);
-  }
-}
-
-export class UpdateMinBalanceToIssueCall__Inputs {
-  _call: UpdateMinBalanceToIssueCall;
-
-  constructor(call: UpdateMinBalanceToIssueCall) {
-    this._call = call;
-  }
-
-  get newMinBalance(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class UpdateMinBalanceToIssueCall__Outputs {
-  _call: UpdateMinBalanceToIssueCall;
-
-  constructor(call: UpdateMinBalanceToIssueCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateMinBalanceToReceiveCall extends ethereum.Call {
-  get inputs(): UpdateMinBalanceToReceiveCall__Inputs {
-    return new UpdateMinBalanceToReceiveCall__Inputs(this);
-  }
-
-  get outputs(): UpdateMinBalanceToReceiveCall__Outputs {
-    return new UpdateMinBalanceToReceiveCall__Outputs(this);
-  }
-}
-
-export class UpdateMinBalanceToReceiveCall__Inputs {
-  _call: UpdateMinBalanceToReceiveCall;
-
-  constructor(call: UpdateMinBalanceToReceiveCall) {
-    this._call = call;
-  }
-
-  get newMinBalance(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class UpdateMinBalanceToReceiveCall__Outputs {
-  _call: UpdateMinBalanceToReceiveCall;
-
-  constructor(call: UpdateMinBalanceToReceiveCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateMinBalanceToTransferCall extends ethereum.Call {
-  get inputs(): UpdateMinBalanceToTransferCall__Inputs {
-    return new UpdateMinBalanceToTransferCall__Inputs(this);
-  }
-
-  get outputs(): UpdateMinBalanceToTransferCall__Outputs {
-    return new UpdateMinBalanceToTransferCall__Outputs(this);
-  }
-}
-
-export class UpdateMinBalanceToTransferCall__Inputs {
-  _call: UpdateMinBalanceToTransferCall;
-
-  constructor(call: UpdateMinBalanceToTransferCall) {
-    this._call = call;
-  }
-
-  get newMinBalance(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class UpdateMinBalanceToTransferCall__Outputs {
-  _call: UpdateMinBalanceToTransferCall;
-
-  constructor(call: UpdateMinBalanceToTransferCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateMinPriceToIssueCall extends ethereum.Call {
-  get inputs(): UpdateMinPriceToIssueCall__Inputs {
-    return new UpdateMinPriceToIssueCall__Inputs(this);
-  }
-
-  get outputs(): UpdateMinPriceToIssueCall__Outputs {
-    return new UpdateMinPriceToIssueCall__Outputs(this);
-  }
-}
-
-export class UpdateMinPriceToIssueCall__Inputs {
-  _call: UpdateMinPriceToIssueCall;
-
-  constructor(call: UpdateMinPriceToIssueCall) {
-    this._call = call;
+    return this._call.inputValues[3].value.toBigInt();
   }
 
   get newMinPrice(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class UpdateMinPriceToIssueCall__Outputs {
-  _call: UpdateMinPriceToIssueCall;
-
-  constructor(call: UpdateMinPriceToIssueCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateStakeToIssueCall extends ethereum.Call {
-  get inputs(): UpdateStakeToIssueCall__Inputs {
-    return new UpdateStakeToIssueCall__Inputs(this);
+    return this._call.inputValues[4].value.toBigInt();
   }
 
-  get outputs(): UpdateStakeToIssueCall__Outputs {
-    return new UpdateStakeToIssueCall__Outputs(this);
-  }
-}
-
-export class UpdateStakeToIssueCall__Inputs {
-  _call: UpdateStakeToIssueCall;
-
-  constructor(call: UpdateStakeToIssueCall) {
-    this._call = call;
+  get newMaxPrice(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
   }
 
   get newMinStake(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+    return this._call.inputValues[6].value.toBigInt();
   }
 
   get newMaxStake(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[7].value.toBigInt();
+  }
+
+  get trustedForwarder(): Address {
+    return this._call.inputValues[8].value.toAddress();
   }
 }
 
-export class UpdateStakeToIssueCall__Outputs {
-  _call: UpdateStakeToIssueCall;
+export class UpdateParametersCall__Outputs {
+  _call: UpdateParametersCall;
 
-  constructor(call: UpdateStakeToIssueCall) {
+  constructor(call: UpdateParametersCall) {
     this._call = call;
   }
 }
@@ -3937,6 +3873,36 @@ export class WithdrawFeesCall__Outputs {
   _call: WithdrawFeesCall;
 
   constructor(call: WithdrawFeesCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawPaymentsCall extends ethereum.Call {
+  get inputs(): WithdrawPaymentsCall__Inputs {
+    return new WithdrawPaymentsCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawPaymentsCall__Outputs {
+    return new WithdrawPaymentsCall__Outputs(this);
+  }
+}
+
+export class WithdrawPaymentsCall__Inputs {
+  _call: WithdrawPaymentsCall;
+
+  constructor(call: WithdrawPaymentsCall) {
+    this._call = call;
+  }
+
+  get payee(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class WithdrawPaymentsCall__Outputs {
+  _call: WithdrawPaymentsCall;
+
+  constructor(call: WithdrawPaymentsCall) {
     this._call = call;
   }
 }

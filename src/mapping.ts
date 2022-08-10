@@ -453,17 +453,17 @@ export function handleStaked(event: Staked): void {
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
       totalRegistry.staked = event.params.value.neg();
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
       totalRegistry.staked = event.params.value;
     }
   } else {
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
       totalRegistry.staked = totalRegistry.staked.minus(event.params.value);
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
       totalRegistry.staked = totalRegistry.staked.plus(event.params.value);
     }
   }
@@ -475,10 +475,10 @@ export function handleStaked(event: Staked): void {
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
       dailyRegistry.staked = lastDayRegistry.staked.minus(event.params.value);
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
       dailyRegistry.staked = lastDayRegistry.staked.plus(event.params.value);
     }
     dailyRegistry.issued = lastDayRegistry.issued;
@@ -489,10 +489,10 @@ export function handleStaked(event: Staked): void {
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
   } else {
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
       dailyRegistry.staked = dailyRegistry.staked.minus(event.params.value);
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
       dailyRegistry.staked = dailyRegistry.staked.plus(event.params.value);
     }
   }

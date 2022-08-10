@@ -23,17 +23,17 @@ dataSources:
         - name: KRBTokenV01
           file: ./abis/KRBTokenV01.json
       eventHandlers:
-        - event: Deleted(bytes32,string)
+        - event: Deleted(uint256,string)
           handler: handleDeleted
-        - event: Disputed(bytes32,bytes32)
+        - event: Disputed(uint256,uint256)
           handler: handleDisputed
-        - event: Expired(bytes32)
+        - event: Expired(uint256)
           handler: handleExpired
-        - event: Issued(bytes32,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string))
+        - event: Issued(uint256,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string))
           handler: handleIssued
-        - event: Revoked(bytes32,string)
+        - event: Revoked(uint256,string)
           handler: handleRevoked
-        - event: Suspended(bytes32,string)
+        - event: Suspended(uint256,string)
           handler: handleSuspended
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

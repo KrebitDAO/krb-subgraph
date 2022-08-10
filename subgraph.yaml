@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: KRBTokenV01
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0xDB13a2Df867495da84764c55d0E82Ded180F7F6d"
+      address: "0xee524d0b396C8F9BcfD7Ac336d17aa0397a32CbE"
       abi: KRBTokenV01
-      startBlock: 10482863 
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -23,17 +23,17 @@ dataSources:
         - name: KRBTokenV01
           file: ./abis/KRBTokenV01.json
       eventHandlers:
-        - event: Deleted(bytes32,string)
+        - event: Deleted(uint256,string)
           handler: handleDeleted
-        - event: Disputed(bytes32,bytes32)
+        - event: Disputed(uint256,uint256)
           handler: handleDisputed
-        - event: Expired(bytes32)
+        - event: Expired(uint256)
           handler: handleExpired
-        - event: Issued(bytes32,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string))
+        - event: Issued(uint256,(string,string,string,(string,address),(string,address,string,string,string,string,uint8,uint256,uint256,uint256,uint256),(string,string),string,string))
           handler: handleIssued
-        - event: Revoked(bytes32,string)
+        - event: Revoked(uint256,string)
           handler: handleRevoked
-        - event: Suspended(bytes32,string)
+        - event: Suspended(uint256,string)
           handler: handleSuspended
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -42,11 +42,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: erc20
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0xDB13a2Df867495da84764c55d0E82Ded180F7F6d"
+      address: "0xee524d0b396C8F9BcfD7Ac336d17aa0397a32CbE"
       abi: IERC20
-      startBlock: 10482863 
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,11 +64,11 @@ dataSources:
       file: ./node_modules/@openzeppelin/subgraphs/src/datasources/erc20.ts
   - kind: ethereum/contract
     name: pausable
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0xDB13a2Df867495da84764c55d0E82Ded180F7F6d"
+      address: "0xee524d0b396C8F9BcfD7Ac336d17aa0397a32CbE"
       abi: Pausable
-      startBlock: 10482863 
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -86,11 +86,11 @@ dataSources:
       file: ./node_modules/@openzeppelin/subgraphs/src/datasources/pausable.ts
   - kind: ethereum/contract
     name: accesscontrol
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0xDB13a2Df867495da84764c55d0E82Ded180F7F6d"
+      address: "0xee524d0b396C8F9BcfD7Ac336d17aa0397a32CbE"
       abi: AccessControl
-      startBlock: 10482863 
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

@@ -1,10 +1,5 @@
 [
   {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -66,9 +61,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "uuid",
-        "type": "bytes32"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -85,15 +80,15 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "uuid",
-        "type": "bytes32"
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "disputedBy",
-        "type": "bytes32"
+        "type": "uint256"
       }
     ],
     "name": "Disputed",
@@ -104,9 +99,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "uuid",
-        "type": "bytes32"
+        "type": "uint256"
       }
     ],
     "name": "Expired",
@@ -117,9 +112,22 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "uuid",
-        "type": "bytes32"
+        "type": "uint256"
       },
       {
         "components": [
@@ -272,9 +280,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "uuid",
-        "type": "bytes32"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -391,9 +399,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "uuid",
-        "type": "bytes32"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -1435,9 +1443,9 @@
     "name": "getUuid",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "",
-        "type": "bytes32"
+        "type": "uint256"
       }
     ],
     "stateMutability": "pure",
@@ -1652,10 +1660,58 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "version",
+        "type": "string"
+      }
+    ],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "forwarder",
+        "type": "address"
+      }
+    ],
+    "name": "isTrustedForwarder",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxPriceToIssue",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1801,6 +1857,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -1956,9 +2025,9 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "",
-        "type": "bytes32"
+        "type": "uint256"
       }
     ],
     "name": "registry",
@@ -1969,9 +2038,9 @@
         "type": "uint8"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "disputedBy",
-        "type": "bytes32"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -2375,7 +2444,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -2399,12 +2468,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "sender",
+        "name": "from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -2460,6 +2529,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "newMaxPrice",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "newMinStake",
         "type": "uint256"
       },
@@ -2467,6 +2541,11 @@
         "internalType": "uint256",
         "name": "newMaxStake",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "trustedForwarder",
+        "type": "address"
       }
     ],
     "name": "updateParameters",
