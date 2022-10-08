@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: KRBTokenV01
-    network: mumbai
+    network: matic
     source:
-      address: "0xEC30B11e0E8db9Dd0d57E07B150019fa006411Ca"
+      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
       abi: KRBTokenV01
-      startBlock: 27536289
+      startBlock: 34019942
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -42,11 +42,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: erc20
-    network: mumbai
+    network: matic
     source:
-      address: "0xEC30B11e0E8db9Dd0d57E07B150019fa006411Ca"
+      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
       abi: IERC20
-      startBlock: 27536289
+      startBlock: 34019942
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,11 +64,11 @@ dataSources:
       file: ./node_modules/@openzeppelin/subgraphs/src/datasources/erc20.ts
   - kind: ethereum/contract
     name: pausable
-    network: mumbai
+    network: matic
     source:
-      address: "0xEC30B11e0E8db9Dd0d57E07B150019fa006411Ca"
+      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
       abi: Pausable
-      startBlock: 27536289
+      startBlock: 34019942
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -86,11 +86,11 @@ dataSources:
       file: ./node_modules/@openzeppelin/subgraphs/src/datasources/pausable.ts
   - kind: ethereum/contract
     name: accesscontrol
-    network: mumbai
+    network: matic
     source:
-      address: "0xEC30B11e0E8db9Dd0d57E07B150019fa006411Ca"
+      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
       abi: AccessControl
-      startBlock: 27536289
+      startBlock: 34019942
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

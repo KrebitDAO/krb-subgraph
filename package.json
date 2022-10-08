@@ -6,9 +6,9 @@
     "codegen": "graph codegen",
     "build": "yarn codegen && graph build",
     "prepare:xdai": "mustache config/xdai.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:matic": "mustache config/matic.json subgraph.template.yaml > subgraph.yaml",
     "deploy-mumbai": "yarn prepare:mumbai && graph deploy --product hosted-service krebit/krb-mumbai-v01",
-    "deploy-xdai": "yarn prepare:xdai && graph deploy --product hosted-service krebit/xkrb-token-v01"
+    "deploy-matic": "yarn prepare:matic && graph deploy --product hosted-service krebit/krb-matic-v1"
   },
   "dependencies": {
     "@amxx/graphprotocol-utils": "^1.0.0-alpha.12",
