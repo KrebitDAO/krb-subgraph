@@ -22,6 +22,12 @@ import { constants } from "@amxx/graphprotocol-utils";
 
 import { log } from "@graphprotocol/graph-ts";
 
+import { fetchAccount } from "@openzeppelin/subgraphs/src/fetch/account";
+import {
+  fetchERC20,
+  fetchERC20Balance,
+} from "@openzeppelin/subgraphs/src/fetch/erc20";
+
 export function fetchLastDayCredentialRegistry(
   lastDay: String
 ): CredentialRegistry {
@@ -79,6 +85,9 @@ export function handleIssued(event: Issued): void {
   credentialSchema._type = event.params.vc.credentialSchema._type;
   credentialSchema.save();
 
+  let account = fetchAccount(event.params.vc.credentialSubject.ethereumAddress);
+  let contract = fetchERC20(event.address);
+  let balance = fetchERC20Balance(contract, account);
   let vc = new VerifiableCredential(event.params.uuid.toHexString());
 
   // Entity fields can be set based on event parameters
@@ -88,6 +97,8 @@ export function handleIssued(event: Issued): void {
   vc.credentialSubjectDID = event.params.vc.credentialSubject.id;
   vc.credentialSubjectAddress =
     event.params.vc.credentialSubject.ethereumAddress;
+  vc.account = account.id;
+  vc.reputation = balance.value;
   vc.issuer = issuer.id;
   vc.credentialSubject = credentialSubject.id;
   vc.credentialSchema = credentialSchema.id;

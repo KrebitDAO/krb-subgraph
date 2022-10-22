@@ -5,7 +5,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "yarn codegen && graph build",
-    "prepare:xdai": "mustache config/xdai.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml",
     "prepare:matic": "mustache config/matic.json subgraph.template.yaml > subgraph.yaml",
     "deploy-mumbai": "yarn prepare:mumbai && graph deploy --product hosted-service krebit/krb-mumbai-v01",
     "deploy-matic": "yarn prepare:matic && graph deploy --product hosted-service krebit/krb-matic-v1"

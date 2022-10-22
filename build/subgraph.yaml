@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: KRBTokenV01
-    network: matic
+    network: mumbai
     source:
-      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
+      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
       abi: KRBTokenV01
-      startBlock: 34019942
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -42,11 +42,11 @@ dataSources:
       file: KRBTokenV01/KRBTokenV01.wasm
   - kind: ethereum/contract
     name: erc20
-    network: matic
+    network: mumbai
     source:
-      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
+      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
       abi: IERC20
-      startBlock: 34019942
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -64,11 +64,11 @@ dataSources:
       file: erc20/erc20.wasm
   - kind: ethereum/contract
     name: pausable
-    network: matic
+    network: mumbai
     source:
-      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
+      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
       abi: Pausable
-      startBlock: 34019942
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -86,11 +86,11 @@ dataSources:
       file: pausable/pausable.wasm
   - kind: ethereum/contract
     name: accesscontrol
-    network: matic
+    network: mumbai
     source:
-      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
+      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
       abi: AccessControl
-      startBlock: 34019942
+      startBlock: 27536289
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

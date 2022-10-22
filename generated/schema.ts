@@ -182,6 +182,15 @@ export class Account extends Entity {
   set roleRevokedSender(value: Array<string>) {
     this.set("roleRevokedSender", Value.fromStringArray(value));
   }
+
+  get VerifiableCredentials(): Array<string> {
+    let value = this.get("VerifiableCredentials");
+    return value.toStringArray();
+  }
+
+  set VerifiableCredentials(value: Array<string>) {
+    this.set("VerifiableCredentials", Value.fromStringArray(value));
+  }
 }
 
 export class ERC20Contract extends Entity {
@@ -1752,6 +1761,24 @@ export class VerifiableCredential extends Entity {
     } else {
       this.set("disputedBy", Value.fromString(value as string));
     }
+  }
+
+  get account(): string {
+    let value = this.get("account");
+    return value.toString();
+  }
+
+  set account(value: string) {
+    this.set("account", Value.fromString(value));
+  }
+
+  get reputation(): BigDecimal {
+    let value = this.get("reputation");
+    return value.toBigDecimal();
+  }
+
+  set reputation(value: BigDecimal) {
+    this.set("reputation", Value.fromBigDecimal(value));
   }
 }
 

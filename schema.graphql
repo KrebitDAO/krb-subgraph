@@ -13,6 +13,7 @@ type Account @entity {
   roleGrantedSender: [RoleGranted!]! @derivedFrom(field: "sender")
   roleRevoked: [RoleRevoked!]! @derivedFrom(field: "account")
   roleRevokedSender: [RoleRevoked!]! @derivedFrom(field: "sender")
+  VerifiableCredentials: [VerifiableCredential!]! @derivedFrom(field: "account")
 }
 type ERC20Contract @entity {
   id: ID!
@@ -168,6 +169,8 @@ type VerifiableCredential @entity {
   transaction: String
   reason: String
   disputedBy: String
+  account: Account!
+  reputation: BigDecimal!
 }
 
 type CredentialRegistry @entity {
@@ -182,3 +185,11 @@ type CredentialRegistry @entity {
   disputed: BigInt!
   expired: BigInt!
 }
+
+type _Schema_
+  @fulltext(
+    name: "credentialTypeSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "VerifiableCredential", fields: [{ name: "_type" }] }]
+  )
