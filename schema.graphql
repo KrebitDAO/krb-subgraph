@@ -170,7 +170,6 @@ type VerifiableCredential @entity {
   reason: String
   disputedBy: String
   account: Account!
-  reputation: BigDecimal!
 }
 
 type CredentialRegistry @entity {
