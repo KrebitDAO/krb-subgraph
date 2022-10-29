@@ -6,62 +6,62 @@ import {
   Value,
   ValueKind,
   store,
-  Address,
   Bytes,
   BigInt,
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
 export class Account extends Entity {
-  constructor(id: string) {
+  constructor(id: Bytes) {
     super();
-    this.set("id", Value.fromString(id));
+    this.set("id", Value.fromBytes(id));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Account entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Account entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Account", id.toString(), this);
-  }
-
-  static load(id: string): Account | null {
-    return store.get("Account", id) as Account | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get asERC20(): string | null {
-    let value = this.get("asERC20");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
+    assert(id != null, "Cannot save Account entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Account must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Account", id.toBytes().toHexString(), this);
     }
   }
 
-  set asERC20(value: string | null) {
-    if (value === null) {
+  static load(id: Bytes): Account | null {
+    return changetype<Account | null>(store.get("Account", id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get asERC20(): Bytes | null {
+    let value = this.get("asERC20");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set asERC20(value: Bytes | null) {
+    if (!value) {
       this.unset("asERC20");
     } else {
-      this.set("asERC20", Value.fromString(value as string));
+      this.set("asERC20", Value.fromBytes(<Bytes>value));
     }
   }
 
   get ERC20balances(): Array<string> {
     let value = this.get("ERC20balances");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set ERC20balances(value: Array<string>) {
@@ -70,7 +70,7 @@ export class Account extends Entity {
 
   get ERC20approvalsOwner(): Array<string> {
     let value = this.get("ERC20approvalsOwner");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set ERC20approvalsOwner(value: Array<string>) {
@@ -79,7 +79,7 @@ export class Account extends Entity {
 
   get ERC20approvalsSpender(): Array<string> {
     let value = this.get("ERC20approvalsSpender");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set ERC20approvalsSpender(value: Array<string>) {
@@ -88,7 +88,7 @@ export class Account extends Entity {
 
   get ERC20transferFromEvent(): Array<string> {
     let value = this.get("ERC20transferFromEvent");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set ERC20transferFromEvent(value: Array<string>) {
@@ -97,95 +97,25 @@ export class Account extends Entity {
 
   get ERC20transferToEvent(): Array<string> {
     let value = this.get("ERC20transferToEvent");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set ERC20transferToEvent(value: Array<string>) {
     this.set("ERC20transferToEvent", Value.fromStringArray(value));
   }
 
-  get asPausable(): string | null {
-    let value = this.get("asPausable");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get events(): Array<string> {
+    let value = this.get("events");
+    return value!.toStringArray();
   }
 
-  set asPausable(value: string | null) {
-    if (value === null) {
-      this.unset("asPausable");
-    } else {
-      this.set("asPausable", Value.fromString(value as string));
-    }
-  }
-
-  get asAccessControl(): string | null {
-    let value = this.get("asAccessControl");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set asAccessControl(value: string | null) {
-    if (value === null) {
-      this.unset("asAccessControl");
-    } else {
-      this.set("asAccessControl", Value.fromString(value as string));
-    }
-  }
-
-  get membership(): Array<string> {
-    let value = this.get("membership");
-    return value.toStringArray();
-  }
-
-  set membership(value: Array<string>) {
-    this.set("membership", Value.fromStringArray(value));
-  }
-
-  get roleGranted(): Array<string> {
-    let value = this.get("roleGranted");
-    return value.toStringArray();
-  }
-
-  set roleGranted(value: Array<string>) {
-    this.set("roleGranted", Value.fromStringArray(value));
-  }
-
-  get roleGrantedSender(): Array<string> {
-    let value = this.get("roleGrantedSender");
-    return value.toStringArray();
-  }
-
-  set roleGrantedSender(value: Array<string>) {
-    this.set("roleGrantedSender", Value.fromStringArray(value));
-  }
-
-  get roleRevoked(): Array<string> {
-    let value = this.get("roleRevoked");
-    return value.toStringArray();
-  }
-
-  set roleRevoked(value: Array<string>) {
-    this.set("roleRevoked", Value.fromStringArray(value));
-  }
-
-  get roleRevokedSender(): Array<string> {
-    let value = this.get("roleRevokedSender");
-    return value.toStringArray();
-  }
-
-  set roleRevokedSender(value: Array<string>) {
-    this.set("roleRevokedSender", Value.fromStringArray(value));
+  set events(value: Array<string>) {
+    this.set("events", Value.fromStringArray(value));
   }
 
   get VerifiableCredentials(): Array<string> {
     let value = this.get("VerifiableCredentials");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set VerifiableCredentials(value: Array<string>) {
@@ -194,47 +124,50 @@ export class Account extends Entity {
 }
 
 export class ERC20Contract extends Entity {
-  constructor(id: string) {
+  constructor(id: Bytes) {
     super();
-    this.set("id", Value.fromString(id));
+    this.set("id", Value.fromBytes(id));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ERC20Contract entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save ERC20Contract entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
+    assert(id != null, "Cannot save ERC20Contract entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type ERC20Contract must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ERC20Contract", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): ERC20Contract | null {
+    return changetype<ERC20Contract | null>(
+      store.get("ERC20Contract", id.toHexString())
     );
-    store.set("ERC20Contract", id.toString(), this);
   }
 
-  static load(id: string): ERC20Contract | null {
-    return store.get("ERC20Contract", id) as ERC20Contract | null;
-  }
-
-  get id(): string {
+  get id(): Bytes {
     let value = this.get("id");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
   }
 
-  get asAccount(): string {
+  get asAccount(): Bytes {
     let value = this.get("asAccount");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set asAccount(value: string) {
-    this.set("asAccount", Value.fromString(value));
+  set asAccount(value: Bytes) {
+    this.set("asAccount", Value.fromBytes(value));
   }
 
   get name(): string | null {
     let value = this.get("name");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -242,16 +175,16 @@ export class ERC20Contract extends Entity {
   }
 
   set name(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("name");
     } else {
-      this.set("name", Value.fromString(value as string));
+      this.set("name", Value.fromString(<string>value));
     }
   }
 
   get symbol(): string | null {
     let value = this.get("symbol");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -259,16 +192,16 @@ export class ERC20Contract extends Entity {
   }
 
   set symbol(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("symbol");
     } else {
-      this.set("symbol", Value.fromString(value as string));
+      this.set("symbol", Value.fromString(<string>value));
     }
   }
 
   get decimals(): i32 {
     let value = this.get("decimals");
-    return value.toI32();
+    return value!.toI32();
   }
 
   set decimals(value: i32) {
@@ -277,7 +210,7 @@ export class ERC20Contract extends Entity {
 
   get totalSupply(): string {
     let value = this.get("totalSupply");
-    return value.toString();
+    return value!.toString();
   }
 
   set totalSupply(value: string) {
@@ -286,7 +219,7 @@ export class ERC20Contract extends Entity {
 
   get balances(): Array<string> {
     let value = this.get("balances");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set balances(value: Array<string>) {
@@ -295,7 +228,7 @@ export class ERC20Contract extends Entity {
 
   get approvals(): Array<string> {
     let value = this.get("approvals");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set approvals(value: Array<string>) {
@@ -304,7 +237,7 @@ export class ERC20Contract extends Entity {
 
   get transfers(): Array<string> {
     let value = this.get("transfers");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set transfers(value: Array<string>) {
@@ -320,57 +253,58 @@ export class ERC20Balance extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ERC20Balance entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save ERC20Balance entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("ERC20Balance", id.toString(), this);
+    assert(id != null, "Cannot save ERC20Balance entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ERC20Balance must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ERC20Balance", id.toString(), this);
+    }
   }
 
   static load(id: string): ERC20Balance | null {
-    return store.get("ERC20Balance", id) as ERC20Balance | null;
+    return changetype<ERC20Balance | null>(store.get("ERC20Balance", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
 
-  get contract(): string {
+  get contract(): Bytes {
     let value = this.get("contract");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set contract(value: string) {
-    this.set("contract", Value.fromString(value));
+  set contract(value: Bytes) {
+    this.set("contract", Value.fromBytes(value));
   }
 
-  get account(): string | null {
+  get account(): Bytes | null {
     let value = this.get("account");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set account(value: string | null) {
-    if (value === null) {
+  set account(value: Bytes | null) {
+    if (!value) {
       this.unset("account");
     } else {
-      this.set("account", Value.fromString(value as string));
+      this.set("account", Value.fromBytes(<Bytes>value));
     }
   }
 
   get value(): BigDecimal {
     let value = this.get("value");
-    return value.toBigDecimal();
+    return value!.toBigDecimal();
   }
 
   set value(value: BigDecimal) {
@@ -379,7 +313,7 @@ export class ERC20Balance extends Entity {
 
   get valueExact(): BigInt {
     let value = this.get("valueExact");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set valueExact(value: BigInt) {
@@ -388,7 +322,7 @@ export class ERC20Balance extends Entity {
 
   get transferFromEvent(): Array<string> {
     let value = this.get("transferFromEvent");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set transferFromEvent(value: Array<string>) {
@@ -397,7 +331,7 @@ export class ERC20Balance extends Entity {
 
   get transferToEvent(): Array<string> {
     let value = this.get("transferToEvent");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set transferToEvent(value: Array<string>) {
@@ -413,58 +347,59 @@ export class ERC20Approval extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ERC20Approval entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save ERC20Approval entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("ERC20Approval", id.toString(), this);
+    assert(id != null, "Cannot save ERC20Approval entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ERC20Approval must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ERC20Approval", id.toString(), this);
+    }
   }
 
   static load(id: string): ERC20Approval | null {
-    return store.get("ERC20Approval", id) as ERC20Approval | null;
+    return changetype<ERC20Approval | null>(store.get("ERC20Approval", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
 
-  get contract(): string {
+  get contract(): Bytes {
     let value = this.get("contract");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set contract(value: string) {
-    this.set("contract", Value.fromString(value));
+  set contract(value: Bytes) {
+    this.set("contract", Value.fromBytes(value));
   }
 
-  get owner(): string {
+  get owner(): Bytes {
     let value = this.get("owner");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set owner(value: string) {
-    this.set("owner", Value.fromString(value));
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
   }
 
-  get spender(): string {
+  get spender(): Bytes {
     let value = this.get("spender");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set spender(value: string) {
-    this.set("spender", Value.fromString(value));
+  set spender(value: Bytes) {
+    this.set("spender", Value.fromBytes(value));
   }
 
   get value(): BigDecimal {
     let value = this.get("value");
-    return value.toBigDecimal();
+    return value!.toBigDecimal();
   }
 
   set value(value: BigDecimal) {
@@ -473,7 +408,7 @@ export class ERC20Approval extends Entity {
 
   get valueExact(): BigInt {
     let value = this.get("valueExact");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set valueExact(value: BigInt) {
@@ -489,31 +424,41 @@ export class ERC20Transfer extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ERC20Transfer entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save ERC20Transfer entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("ERC20Transfer", id.toString(), this);
+    assert(id != null, "Cannot save ERC20Transfer entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ERC20Transfer must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ERC20Transfer", id.toString(), this);
+    }
   }
 
   static load(id: string): ERC20Transfer | null {
-    return store.get("ERC20Transfer", id) as ERC20Transfer | null;
+    return changetype<ERC20Transfer | null>(store.get("ERC20Transfer", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
 
+  get emitter(): Bytes {
+    let value = this.get("emitter");
+    return value!.toBytes();
+  }
+
+  set emitter(value: Bytes) {
+    this.set("emitter", Value.fromBytes(value));
+  }
+
   get transaction(): string {
     let value = this.get("transaction");
-    return value.toString();
+    return value!.toString();
   }
 
   set transaction(value: string) {
@@ -522,42 +467,42 @@ export class ERC20Transfer extends Entity {
 
   get timestamp(): BigInt {
     let value = this.get("timestamp");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set timestamp(value: BigInt) {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get contract(): string {
+  get contract(): Bytes {
     let value = this.get("contract");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set contract(value: string) {
-    this.set("contract", Value.fromString(value));
+  set contract(value: Bytes) {
+    this.set("contract", Value.fromBytes(value));
   }
 
-  get from(): string | null {
+  get from(): Bytes | null {
     let value = this.get("from");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set from(value: string | null) {
-    if (value === null) {
+  set from(value: Bytes | null) {
+    if (!value) {
       this.unset("from");
     } else {
-      this.set("from", Value.fromString(value as string));
+      this.set("from", Value.fromBytes(<Bytes>value));
     }
   }
 
   get fromBalance(): string | null {
     let value = this.get("fromBalance");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -565,33 +510,33 @@ export class ERC20Transfer extends Entity {
   }
 
   set fromBalance(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("fromBalance");
     } else {
-      this.set("fromBalance", Value.fromString(value as string));
+      this.set("fromBalance", Value.fromString(<string>value));
     }
   }
 
-  get to(): string | null {
+  get to(): Bytes | null {
     let value = this.get("to");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set to(value: string | null) {
-    if (value === null) {
+  set to(value: Bytes | null) {
+    if (!value) {
       this.unset("to");
     } else {
-      this.set("to", Value.fromString(value as string));
+      this.set("to", Value.fromBytes(<Bytes>value));
     }
   }
 
   get toBalance(): string | null {
     let value = this.get("toBalance");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -599,16 +544,16 @@ export class ERC20Transfer extends Entity {
   }
 
   set toBalance(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("toBalance");
     } else {
-      this.set("toBalance", Value.fromString(value as string));
+      this.set("toBalance", Value.fromString(<string>value));
     }
   }
 
   get value(): BigDecimal {
     let value = this.get("value");
-    return value.toBigDecimal();
+    return value!.toBigDecimal();
   }
 
   set value(value: BigDecimal) {
@@ -617,611 +562,11 @@ export class ERC20Transfer extends Entity {
 
   get valueExact(): BigInt {
     let value = this.get("valueExact");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set valueExact(value: BigInt) {
     this.set("valueExact", Value.fromBigInt(value));
-  }
-}
-
-export class Pausable extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Pausable entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Pausable entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Pausable", id.toString(), this);
-  }
-
-  static load(id: string): Pausable | null {
-    return store.get("Pausable", id) as Pausable | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get asAccount(): string {
-    let value = this.get("asAccount");
-    return value.toString();
-  }
-
-  set asAccount(value: string) {
-    this.set("asAccount", Value.fromString(value));
-  }
-
-  get isPaused(): boolean {
-    let value = this.get("isPaused");
-    return value.toBoolean();
-  }
-
-  set isPaused(value: boolean) {
-    this.set("isPaused", Value.fromBoolean(value));
-  }
-
-  get paused(): Array<string> {
-    let value = this.get("paused");
-    return value.toStringArray();
-  }
-
-  set paused(value: Array<string>) {
-    this.set("paused", Value.fromStringArray(value));
-  }
-}
-
-export class Paused extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Paused entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Paused entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Paused", id.toString(), this);
-  }
-
-  static load(id: string): Paused | null {
-    return store.get("Paused", id) as Paused | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get transaction(): string {
-    let value = this.get("transaction");
-    return value.toString();
-  }
-
-  set transaction(value: string) {
-    this.set("transaction", Value.fromString(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get contract(): string {
-    let value = this.get("contract");
-    return value.toString();
-  }
-
-  set contract(value: string) {
-    this.set("contract", Value.fromString(value));
-  }
-
-  get isPaused(): boolean {
-    let value = this.get("isPaused");
-    return value.toBoolean();
-  }
-
-  set isPaused(value: boolean) {
-    this.set("isPaused", Value.fromBoolean(value));
-  }
-}
-
-export class AccessControl extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save AccessControl entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save AccessControl entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("AccessControl", id.toString(), this);
-  }
-
-  static load(id: string): AccessControl | null {
-    return store.get("AccessControl", id) as AccessControl | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get asAccount(): string {
-    let value = this.get("asAccount");
-    return value.toString();
-  }
-
-  set asAccount(value: string) {
-    this.set("asAccount", Value.fromString(value));
-  }
-
-  get roles(): Array<string> {
-    let value = this.get("roles");
-    return value.toStringArray();
-  }
-
-  set roles(value: Array<string>) {
-    this.set("roles", Value.fromStringArray(value));
-  }
-}
-
-export class Role extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Role entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Role entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Role", id.toString(), this);
-  }
-
-  static load(id: string): Role | null {
-    return store.get("Role", id) as Role | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get roleOf(): Array<string> {
-    let value = this.get("roleOf");
-    return value.toStringArray();
-  }
-
-  set roleOf(value: Array<string>) {
-    this.set("roleOf", Value.fromStringArray(value));
-  }
-}
-
-export class AccessControlRole extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save AccessControlRole entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save AccessControlRole entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("AccessControlRole", id.toString(), this);
-  }
-
-  static load(id: string): AccessControlRole | null {
-    return store.get("AccessControlRole", id) as AccessControlRole | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get contract(): string {
-    let value = this.get("contract");
-    return value.toString();
-  }
-
-  set contract(value: string) {
-    this.set("contract", Value.fromString(value));
-  }
-
-  get role(): string {
-    let value = this.get("role");
-    return value.toString();
-  }
-
-  set role(value: string) {
-    this.set("role", Value.fromString(value));
-  }
-
-  get admin(): string {
-    let value = this.get("admin");
-    return value.toString();
-  }
-
-  set admin(value: string) {
-    this.set("admin", Value.fromString(value));
-  }
-
-  get adminOf(): Array<string> {
-    let value = this.get("adminOf");
-    return value.toStringArray();
-  }
-
-  set adminOf(value: Array<string>) {
-    this.set("adminOf", Value.fromStringArray(value));
-  }
-
-  get members(): Array<string> {
-    let value = this.get("members");
-    return value.toStringArray();
-  }
-
-  set members(value: Array<string>) {
-    this.set("members", Value.fromStringArray(value));
-  }
-
-  get roleGranted(): Array<string> {
-    let value = this.get("roleGranted");
-    return value.toStringArray();
-  }
-
-  set roleGranted(value: Array<string>) {
-    this.set("roleGranted", Value.fromStringArray(value));
-  }
-
-  get roleRevoked(): Array<string> {
-    let value = this.get("roleRevoked");
-    return value.toStringArray();
-  }
-
-  set roleRevoked(value: Array<string>) {
-    this.set("roleRevoked", Value.fromStringArray(value));
-  }
-
-  get roleAdminChanged(): Array<string> {
-    let value = this.get("roleAdminChanged");
-    return value.toStringArray();
-  }
-
-  set roleAdminChanged(value: Array<string>) {
-    this.set("roleAdminChanged", Value.fromStringArray(value));
-  }
-}
-
-export class AccessControlRoleMember extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save AccessControlRoleMember entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save AccessControlRoleMember entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("AccessControlRoleMember", id.toString(), this);
-  }
-
-  static load(id: string): AccessControlRoleMember | null {
-    return store.get(
-      "AccessControlRoleMember",
-      id
-    ) as AccessControlRoleMember | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get accesscontrolrole(): string {
-    let value = this.get("accesscontrolrole");
-    return value.toString();
-  }
-
-  set accesscontrolrole(value: string) {
-    this.set("accesscontrolrole", Value.fromString(value));
-  }
-
-  get account(): string {
-    let value = this.get("account");
-    return value.toString();
-  }
-
-  set account(value: string) {
-    this.set("account", Value.fromString(value));
-  }
-}
-
-export class RoleAdminChanged extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save RoleAdminChanged entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save RoleAdminChanged entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("RoleAdminChanged", id.toString(), this);
-  }
-
-  static load(id: string): RoleAdminChanged | null {
-    return store.get("RoleAdminChanged", id) as RoleAdminChanged | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get transaction(): string {
-    let value = this.get("transaction");
-    return value.toString();
-  }
-
-  set transaction(value: string) {
-    this.set("transaction", Value.fromString(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get role(): string {
-    let value = this.get("role");
-    return value.toString();
-  }
-
-  set role(value: string) {
-    this.set("role", Value.fromString(value));
-  }
-
-  get newAdminRole(): string {
-    let value = this.get("newAdminRole");
-    return value.toString();
-  }
-
-  set newAdminRole(value: string) {
-    this.set("newAdminRole", Value.fromString(value));
-  }
-
-  get previousAdminRole(): string {
-    let value = this.get("previousAdminRole");
-    return value.toString();
-  }
-
-  set previousAdminRole(value: string) {
-    this.set("previousAdminRole", Value.fromString(value));
-  }
-}
-
-export class RoleGranted extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save RoleGranted entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save RoleGranted entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("RoleGranted", id.toString(), this);
-  }
-
-  static load(id: string): RoleGranted | null {
-    return store.get("RoleGranted", id) as RoleGranted | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get transaction(): string {
-    let value = this.get("transaction");
-    return value.toString();
-  }
-
-  set transaction(value: string) {
-    this.set("transaction", Value.fromString(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get role(): string {
-    let value = this.get("role");
-    return value.toString();
-  }
-
-  set role(value: string) {
-    this.set("role", Value.fromString(value));
-  }
-
-  get account(): string {
-    let value = this.get("account");
-    return value.toString();
-  }
-
-  set account(value: string) {
-    this.set("account", Value.fromString(value));
-  }
-
-  get sender(): string {
-    let value = this.get("sender");
-    return value.toString();
-  }
-
-  set sender(value: string) {
-    this.set("sender", Value.fromString(value));
-  }
-}
-
-export class RoleRevoked extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save RoleRevoked entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save RoleRevoked entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("RoleRevoked", id.toString(), this);
-  }
-
-  static load(id: string): RoleRevoked | null {
-    return store.get("RoleRevoked", id) as RoleRevoked | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get transaction(): string {
-    let value = this.get("transaction");
-    return value.toString();
-  }
-
-  set transaction(value: string) {
-    this.set("transaction", Value.fromString(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get role(): string {
-    let value = this.get("role");
-    return value.toString();
-  }
-
-  set role(value: string) {
-    this.set("role", Value.fromString(value));
-  }
-
-  get account(): string {
-    let value = this.get("account");
-    return value.toString();
-  }
-
-  set account(value: string) {
-    this.set("account", Value.fromString(value));
-  }
-
-  get sender(): string {
-    let value = this.get("sender");
-    return value.toString();
-  }
-
-  set sender(value: string) {
-    this.set("sender", Value.fromString(value));
   }
 }
 
@@ -1233,22 +578,23 @@ export class Transaction extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Transaction entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Transaction entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Transaction", id.toString(), this);
+    assert(id != null, "Cannot save Transaction entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Transaction must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Transaction", id.toString(), this);
+    }
   }
 
   static load(id: string): Transaction | null {
-    return store.get("Transaction", id) as Transaction | null;
+    return changetype<Transaction | null>(store.get("Transaction", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -1257,7 +603,7 @@ export class Transaction extends Entity {
 
   get timestamp(): BigInt {
     let value = this.get("timestamp");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set timestamp(value: BigInt) {
@@ -1266,7 +612,7 @@ export class Transaction extends Entity {
 
   get blockNumber(): BigInt {
     let value = this.get("blockNumber");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set blockNumber(value: BigInt) {
@@ -1275,7 +621,7 @@ export class Transaction extends Entity {
 
   get events(): Array<string> {
     let value = this.get("events");
-    return value.toStringArray();
+    return value!.toStringArray();
   }
 
   set events(value: Array<string>) {
@@ -1291,22 +637,23 @@ export class Issuer extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Issuer entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Issuer entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Issuer", id.toString(), this);
+    assert(id != null, "Cannot save Issuer entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Issuer must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Issuer", id.toString(), this);
+    }
   }
 
   static load(id: string): Issuer | null {
-    return store.get("Issuer", id) as Issuer | null;
+    return changetype<Issuer | null>(store.get("Issuer", id));
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -1315,7 +662,7 @@ export class Issuer extends Entity {
 
   get ethereumAddress(): Bytes {
     let value = this.get("ethereumAddress");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set ethereumAddress(value: Bytes) {
@@ -1331,22 +678,25 @@ export class CredentialSubject extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save CredentialSubject entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CredentialSubject entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CredentialSubject", id.toString(), this);
+    assert(id != null, "Cannot save CredentialSubject entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type CredentialSubject must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("CredentialSubject", id.toString(), this);
+    }
   }
 
   static load(id: string): CredentialSubject | null {
-    return store.get("CredentialSubject", id) as CredentialSubject | null;
+    return changetype<CredentialSubject | null>(
+      store.get("CredentialSubject", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -1355,7 +705,7 @@ export class CredentialSubject extends Entity {
 
   get ethereumAddress(): Bytes {
     let value = this.get("ethereumAddress");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set ethereumAddress(value: Bytes) {
@@ -1364,7 +714,7 @@ export class CredentialSubject extends Entity {
 
   get _type(): string | null {
     let value = this.get("_type");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1372,16 +722,16 @@ export class CredentialSubject extends Entity {
   }
 
   set _type(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("_type");
     } else {
-      this.set("_type", Value.fromString(value as string));
+      this.set("_type", Value.fromString(<string>value));
     }
   }
 
   get typeSchema(): string | null {
     let value = this.get("typeSchema");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1389,16 +739,16 @@ export class CredentialSubject extends Entity {
   }
 
   set typeSchema(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("typeSchema");
     } else {
-      this.set("typeSchema", Value.fromString(value as string));
+      this.set("typeSchema", Value.fromString(<string>value));
     }
   }
 
   get value(): string | null {
     let value = this.get("value");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1406,16 +756,16 @@ export class CredentialSubject extends Entity {
   }
 
   set value(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("value");
     } else {
-      this.set("value", Value.fromString(value as string));
+      this.set("value", Value.fromString(<string>value));
     }
   }
 
   get encrypted(): string | null {
     let value = this.get("encrypted");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1423,16 +773,16 @@ export class CredentialSubject extends Entity {
   }
 
   set encrypted(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("encrypted");
     } else {
-      this.set("encrypted", Value.fromString(value as string));
+      this.set("encrypted", Value.fromString(<string>value));
     }
   }
 
   get trust(): i32 {
     let value = this.get("trust");
-    return value.toI32();
+    return value!.toI32();
   }
 
   set trust(value: i32) {
@@ -1441,7 +791,7 @@ export class CredentialSubject extends Entity {
 
   get stake(): BigInt {
     let value = this.get("stake");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set stake(value: BigInt) {
@@ -1450,7 +800,7 @@ export class CredentialSubject extends Entity {
 
   get price(): BigInt {
     let value = this.get("price");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set price(value: BigInt) {
@@ -1459,7 +809,7 @@ export class CredentialSubject extends Entity {
 
   get nbf(): BigInt {
     let value = this.get("nbf");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set nbf(value: BigInt) {
@@ -1468,7 +818,7 @@ export class CredentialSubject extends Entity {
 
   get exp(): BigInt {
     let value = this.get("exp");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set exp(value: BigInt) {
@@ -1484,22 +834,25 @@ export class CredentialSchema extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save CredentialSchema entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CredentialSchema entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CredentialSchema", id.toString(), this);
+    assert(id != null, "Cannot save CredentialSchema entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type CredentialSchema must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("CredentialSchema", id.toString(), this);
+    }
   }
 
   static load(id: string): CredentialSchema | null {
-    return store.get("CredentialSchema", id) as CredentialSchema | null;
+    return changetype<CredentialSchema | null>(
+      store.get("CredentialSchema", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -1508,7 +861,7 @@ export class CredentialSchema extends Entity {
 
   get _type(): string | null {
     let value = this.get("_type");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1516,10 +869,10 @@ export class CredentialSchema extends Entity {
   }
 
   set _type(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("_type");
     } else {
-      this.set("_type", Value.fromString(value as string));
+      this.set("_type", Value.fromString(<string>value));
     }
   }
 }
@@ -1532,25 +885,25 @@ export class VerifiableCredential extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save VerifiableCredential entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save VerifiableCredential entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("VerifiableCredential", id.toString(), this);
+    assert(id != null, "Cannot save VerifiableCredential entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VerifiableCredential must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("VerifiableCredential", id.toString(), this);
+    }
   }
 
   static load(id: string): VerifiableCredential | null {
-    return store.get("VerifiableCredential", id) as VerifiableCredential | null;
+    return changetype<VerifiableCredential | null>(
+      store.get("VerifiableCredential", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -1559,7 +912,7 @@ export class VerifiableCredential extends Entity {
 
   get claimId(): string | null {
     let value = this.get("claimId");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1567,16 +920,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set claimId(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("claimId");
     } else {
-      this.set("claimId", Value.fromString(value as string));
+      this.set("claimId", Value.fromString(<string>value));
     }
   }
 
   get _context(): string | null {
     let value = this.get("_context");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1584,16 +937,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set _context(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("_context");
     } else {
-      this.set("_context", Value.fromString(value as string));
+      this.set("_context", Value.fromString(<string>value));
     }
   }
 
   get _type(): string | null {
     let value = this.get("_type");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1601,16 +954,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set _type(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("_type");
     } else {
-      this.set("_type", Value.fromString(value as string));
+      this.set("_type", Value.fromString(<string>value));
     }
   }
 
   get credentialSubjectDID(): string | null {
     let value = this.get("credentialSubjectDID");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1618,16 +971,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set credentialSubjectDID(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("credentialSubjectDID");
     } else {
-      this.set("credentialSubjectDID", Value.fromString(value as string));
+      this.set("credentialSubjectDID", Value.fromString(<string>value));
     }
   }
 
   get credentialSubjectAddress(): Bytes {
     let value = this.get("credentialSubjectAddress");
-    return value.toBytes();
+    return value!.toBytes();
   }
 
   set credentialSubjectAddress(value: Bytes) {
@@ -1636,7 +989,7 @@ export class VerifiableCredential extends Entity {
 
   get issuer(): string {
     let value = this.get("issuer");
-    return value.toString();
+    return value!.toString();
   }
 
   set issuer(value: string) {
@@ -1645,7 +998,7 @@ export class VerifiableCredential extends Entity {
 
   get credentialSubject(): string {
     let value = this.get("credentialSubject");
-    return value.toString();
+    return value!.toString();
   }
 
   set credentialSubject(value: string) {
@@ -1654,7 +1007,7 @@ export class VerifiableCredential extends Entity {
 
   get credentialSchema(): string {
     let value = this.get("credentialSchema");
-    return value.toString();
+    return value!.toString();
   }
 
   set credentialSchema(value: string) {
@@ -1663,7 +1016,7 @@ export class VerifiableCredential extends Entity {
 
   get issuanceDate(): string | null {
     let value = this.get("issuanceDate");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1671,16 +1024,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set issuanceDate(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("issuanceDate");
     } else {
-      this.set("issuanceDate", Value.fromString(value as string));
+      this.set("issuanceDate", Value.fromString(<string>value));
     }
   }
 
   get expirationDate(): string | null {
     let value = this.get("expirationDate");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1688,16 +1041,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set expirationDate(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("expirationDate");
     } else {
-      this.set("expirationDate", Value.fromString(value as string));
+      this.set("expirationDate", Value.fromString(<string>value));
     }
   }
 
   get credentialStatus(): string | null {
     let value = this.get("credentialStatus");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1705,16 +1058,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set credentialStatus(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("credentialStatus");
     } else {
-      this.set("credentialStatus", Value.fromString(value as string));
+      this.set("credentialStatus", Value.fromString(<string>value));
     }
   }
 
   get transaction(): string | null {
     let value = this.get("transaction");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1722,16 +1075,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set transaction(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("transaction");
     } else {
-      this.set("transaction", Value.fromString(value as string));
+      this.set("transaction", Value.fromString(<string>value));
     }
   }
 
   get reason(): string | null {
     let value = this.get("reason");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1739,16 +1092,16 @@ export class VerifiableCredential extends Entity {
   }
 
   set reason(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("reason");
     } else {
-      this.set("reason", Value.fromString(value as string));
+      this.set("reason", Value.fromString(<string>value));
     }
   }
 
   get disputedBy(): string | null {
     let value = this.get("disputedBy");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1756,29 +1109,20 @@ export class VerifiableCredential extends Entity {
   }
 
   set disputedBy(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("disputedBy");
     } else {
-      this.set("disputedBy", Value.fromString(value as string));
+      this.set("disputedBy", Value.fromString(<string>value));
     }
   }
 
-  get account(): string {
+  get account(): Bytes {
     let value = this.get("account");
-    return value.toString();
+    return value!.toBytes();
   }
 
-  set account(value: string) {
-    this.set("account", Value.fromString(value));
-  }
-
-  get reputation(): BigDecimal {
-    let value = this.get("reputation");
-    return value.toBigDecimal();
-  }
-
-  set reputation(value: BigDecimal) {
-    this.set("reputation", Value.fromBigDecimal(value));
+  set account(value: Bytes) {
+    this.set("account", Value.fromBytes(value));
   }
 }
 
@@ -1790,22 +1134,25 @@ export class CredentialRegistry extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save CredentialRegistry entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CredentialRegistry entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CredentialRegistry", id.toString(), this);
+    assert(id != null, "Cannot save CredentialRegistry entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type CredentialRegistry must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("CredentialRegistry", id.toString(), this);
+    }
   }
 
   static load(id: string): CredentialRegistry | null {
-    return store.get("CredentialRegistry", id) as CredentialRegistry | null;
+    return changetype<CredentialRegistry | null>(
+      store.get("CredentialRegistry", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -1814,7 +1161,7 @@ export class CredentialRegistry extends Entity {
 
   get dayUpdated(): string | null {
     let value = this.get("dayUpdated");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1822,16 +1169,16 @@ export class CredentialRegistry extends Entity {
   }
 
   set dayUpdated(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("dayUpdated");
     } else {
-      this.set("dayUpdated", Value.fromString(value as string));
+      this.set("dayUpdated", Value.fromString(<string>value));
     }
   }
 
   get balance(): BigInt {
     let value = this.get("balance");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set balance(value: BigInt) {
@@ -1840,7 +1187,7 @@ export class CredentialRegistry extends Entity {
 
   get staked(): BigInt {
     let value = this.get("staked");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set staked(value: BigInt) {
@@ -1849,7 +1196,7 @@ export class CredentialRegistry extends Entity {
 
   get issued(): BigInt {
     let value = this.get("issued");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set issued(value: BigInt) {
@@ -1858,7 +1205,7 @@ export class CredentialRegistry extends Entity {
 
   get revoked(): BigInt {
     let value = this.get("revoked");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set revoked(value: BigInt) {
@@ -1867,7 +1214,7 @@ export class CredentialRegistry extends Entity {
 
   get deleted(): BigInt {
     let value = this.get("deleted");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set deleted(value: BigInt) {
@@ -1876,7 +1223,7 @@ export class CredentialRegistry extends Entity {
 
   get suspended(): BigInt {
     let value = this.get("suspended");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set suspended(value: BigInt) {
@@ -1885,7 +1232,7 @@ export class CredentialRegistry extends Entity {
 
   get disputed(): BigInt {
     let value = this.get("disputed");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set disputed(value: BigInt) {
@@ -1894,7 +1241,7 @@ export class CredentialRegistry extends Entity {
 
   get expired(): BigInt {
     let value = this.get("expired");
-    return value.toBigInt();
+    return value!.toBigInt();
   }
 
   set expired(value: BigInt) {

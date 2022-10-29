@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
@@ -11,7 +11,7 @@ dataSources:
       startBlock: {{block}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Issuer
@@ -49,7 +49,7 @@ dataSources:
       startBlock: {{block}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - ERC20Contract
@@ -62,49 +62,3 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./node_modules/@openzeppelin/subgraphs/src/datasources/erc20.ts
-  - kind: ethereum/contract
-    name: pausable
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: Pausable
-      startBlock: {{block}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Pausable
-      abis:
-        - name: Pausable
-          file: ./node_modules/@openzeppelin/contracts/build/contracts/Pausable.json
-      eventHandlers:
-        - event: Paused(address)
-          handler: handlePaused
-        - event: Unpaused(address)
-          handler: handleUnpaused
-      file: ./node_modules/@openzeppelin/subgraphs/src/datasources/pausable.ts
-  - kind: ethereum/contract
-    name: accesscontrol
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: AccessControl
-      startBlock: {{block}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - AccessControl
-      abis:
-        - name: AccessControl
-          file: ./node_modules/@openzeppelin/contracts/build/contracts/AccessControl.json
-      eventHandlers:
-        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
-          handler: handleRoleAdminChanged
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleRevoked
-      file: ./node_modules/@openzeppelin/subgraphs/src/datasources/accesscontrol.ts

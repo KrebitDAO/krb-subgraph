@@ -98,7 +98,6 @@ export function handleIssued(event: Issued): void {
   vc.credentialSubjectAddress =
     event.params.vc.credentialSubject.ethereumAddress;
   vc.account = account.id;
-  vc.reputation = balance.value;
   vc.issuer = issuer.id;
   vc.credentialSubject = credentialSubject.id;
   vc.credentialSchema = credentialSchema.id;
@@ -114,12 +113,17 @@ export function handleIssued(event: Issued): void {
   vc.save();
 
   let totalRegistry = CredentialRegistry.load("total");
-  totalRegistry.issued = totalRegistry.issued.plus(BigInt.fromI32(1));
+  if (totalRegistry == null) {
+    totalRegistry = new CredentialRegistry("total");
+    totalRegistry.issued = BigInt.fromI32(1);
+  } else {
+    totalRegistry.issued = totalRegistry.issued.plus(BigInt.fromI32(1));
+  }
 
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
@@ -216,7 +220,7 @@ export function handleDeleted(event: Deleted): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
@@ -257,7 +261,7 @@ export function handleDisputed(event: Disputed): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
@@ -297,7 +301,7 @@ export function handleExpired(event: Expired): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
@@ -338,7 +342,7 @@ export function handleRevoked(event: Revoked): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
@@ -379,7 +383,7 @@ export function handleSuspended(event: Suspended): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
@@ -404,10 +408,10 @@ export function handleTransfer(event: Transfer): void {
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.balance = event.params.value;
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.balance = event.params.value.neg();
     }
     totalRegistry.issued = BigInt.fromI32(0);
@@ -418,10 +422,10 @@ export function handleTransfer(event: Transfer): void {
     totalRegistry.suspended = BigInt.fromI32(0);
     totalRegistry.staked = BigInt.fromI32(0);
   } else {
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.balance = totalRegistry.balance.plus(event.params.value);
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.balance = totalRegistry.balance.minus(event.params.value);
     }
   }
@@ -429,14 +433,14 @@ export function handleTransfer(event: Transfer): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.balance = lastDayRegistry.balance.plus(event.params.value);
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.balance = lastDayRegistry.balance.minus(event.params.value);
     }
     dailyRegistry.issued = lastDayRegistry.issued;
@@ -447,10 +451,10 @@ export function handleTransfer(event: Transfer): void {
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.staked = lastDayRegistry.staked;
   } else {
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.balance = dailyRegistry.balance.plus(event.params.value);
     }
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.balance = dailyRegistry.balance.minus(event.params.value);
     }
   }
@@ -464,17 +468,17 @@ export function handleStaked(event: Staked): void {
   let totalRegistry = CredentialRegistry.load("total");
   if (totalRegistry == null) {
     totalRegistry = new CredentialRegistry("total");
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.staked = event.params.value.neg();
     }
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.staked = event.params.value;
     }
   } else {
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.staked = totalRegistry.staked.minus(event.params.value);
     }
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       totalRegistry.staked = totalRegistry.staked.plus(event.params.value);
     }
   }
@@ -482,14 +486,14 @@ export function handleStaked(event: Staked): void {
   let day = event.block.timestamp.div(BigInt.fromI32(60 * 60 * 24));
   let dailyRegistry = CredentialRegistry.load(day.toString());
   let lastDayRegistry = fetchLastDayCredentialRegistry(
-    totalRegistry.dayUpdated
+    totalRegistry.dayUpdated ? (totalRegistry.dayUpdated as string) : ""
   );
   if (dailyRegistry == null) {
     dailyRegistry = new CredentialRegistry(day.toString());
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.staked = lastDayRegistry.staked.minus(event.params.value);
     }
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.staked = lastDayRegistry.staked.plus(event.params.value);
     }
     dailyRegistry.issued = lastDayRegistry.issued;
@@ -500,10 +504,10 @@ export function handleStaked(event: Staked): void {
     dailyRegistry.suspended = lastDayRegistry.suspended;
     dailyRegistry.balance = lastDayRegistry.balance;
   } else {
-    if (event.params.to.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.to.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.staked = dailyRegistry.staked.minus(event.params.value);
     }
-    if (event.params.from.toHex() == constants.ADDRESS_ZERO) {
+    if (event.params.from.toHex() == constants.ADDRESS_ZERO.toHex()) {
       dailyRegistry.staked = dailyRegistry.staked.plus(event.params.value);
     }
   }

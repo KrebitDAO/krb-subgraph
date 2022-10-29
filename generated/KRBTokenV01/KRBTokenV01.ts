@@ -174,7 +174,9 @@ export class Issued__Params {
   }
 
   get vc(): IssuedVcStruct {
-    return this._event.parameters[1].value.toTuple() as IssuedVcStruct;
+    return changetype<IssuedVcStruct>(
+      this._event.parameters[1].value.toTuple()
+    );
   }
 }
 
@@ -192,15 +194,15 @@ export class IssuedVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): IssuedVcIssuerStruct {
-    return this[3].toTuple() as IssuedVcIssuerStruct;
+    return changetype<IssuedVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): IssuedVcCredentialSubjectStruct {
-    return this[4].toTuple() as IssuedVcCredentialSubjectStruct;
+    return changetype<IssuedVcCredentialSubjectStruct>(this[4].toTuple());
   }
 
   get credentialSchema(): IssuedVcCredentialSchemaStruct {
-    return this[5].toTuple() as IssuedVcCredentialSchemaStruct;
+    return changetype<IssuedVcCredentialSchemaStruct>(this[5].toTuple());
   }
 
   get issuanceDate(): string {
@@ -534,15 +536,21 @@ export class KRBTokenV01__deleteVCInputVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): KRBTokenV01__deleteVCInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__deleteVCInputVcIssuerStruct;
+    return changetype<KRBTokenV01__deleteVCInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__deleteVCInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__deleteVCInputVcCredentialSubjectStruct;
+    return changetype<KRBTokenV01__deleteVCInputVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): KRBTokenV01__deleteVCInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__deleteVCInputVcCredentialSchemaStruct;
+    return changetype<KRBTokenV01__deleteVCInputVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -634,15 +642,21 @@ export class KRBTokenV01__disputeVCByGovernInputVcStruct extends ethereum.Tuple 
   }
 
   get issuer(): KRBTokenV01__disputeVCByGovernInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__disputeVCByGovernInputVcIssuerStruct;
+    return changetype<KRBTokenV01__disputeVCByGovernInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__disputeVCByGovernInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__disputeVCByGovernInputVcCredentialSubjectStruct;
+    return changetype<
+      KRBTokenV01__disputeVCByGovernInputVcCredentialSubjectStruct
+    >(this[4].toTuple());
   }
 
   get credentialSchema(): KRBTokenV01__disputeVCByGovernInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__disputeVCByGovernInputVcCredentialSchemaStruct;
+    return changetype<
+      KRBTokenV01__disputeVCByGovernInputVcCredentialSchemaStruct
+    >(this[5].toTuple());
   }
 
   get issuanceDate(): string {
@@ -734,15 +748,21 @@ export class KRBTokenV01__disputeVCByGovernInputDisputeVCStruct extends ethereum
   }
 
   get issuer(): KRBTokenV01__disputeVCByGovernInputDisputeVCIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__disputeVCByGovernInputDisputeVCIssuerStruct;
+    return changetype<KRBTokenV01__disputeVCByGovernInputDisputeVCIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSubjectStruct;
+    return changetype<
+      KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSubjectStruct
+    >(this[4].toTuple());
   }
 
   get credentialSchema(): KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSchemaStruct;
+    return changetype<
+      KRBTokenV01__disputeVCByGovernInputDisputeVCCredentialSchemaStruct
+    >(this[5].toTuple());
   }
 
   get issuanceDate(): string {
@@ -834,15 +854,21 @@ export class KRBTokenV01__expiredVCInputVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): KRBTokenV01__expiredVCInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__expiredVCInputVcIssuerStruct;
+    return changetype<KRBTokenV01__expiredVCInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__expiredVCInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__expiredVCInputVcCredentialSubjectStruct;
+    return changetype<KRBTokenV01__expiredVCInputVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): KRBTokenV01__expiredVCInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__expiredVCInputVcCredentialSchemaStruct;
+    return changetype<KRBTokenV01__expiredVCInputVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -934,15 +960,21 @@ export class KRBTokenV01__getUuidInputVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): KRBTokenV01__getUuidInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__getUuidInputVcIssuerStruct;
+    return changetype<KRBTokenV01__getUuidInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__getUuidInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__getUuidInputVcCredentialSubjectStruct;
+    return changetype<KRBTokenV01__getUuidInputVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): KRBTokenV01__getUuidInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__getUuidInputVcCredentialSchemaStruct;
+    return changetype<KRBTokenV01__getUuidInputVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -1034,15 +1066,21 @@ export class KRBTokenV01__getVCStatusInputVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): KRBTokenV01__getVCStatusInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__getVCStatusInputVcIssuerStruct;
+    return changetype<KRBTokenV01__getVCStatusInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__getVCStatusInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__getVCStatusInputVcCredentialSubjectStruct;
+    return changetype<KRBTokenV01__getVCStatusInputVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): KRBTokenV01__getVCStatusInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__getVCStatusInputVcCredentialSchemaStruct;
+    return changetype<KRBTokenV01__getVCStatusInputVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -1138,6 +1176,14 @@ export class KRBTokenV01__registryResult {
     map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     return map;
   }
+
+  getCredentialStatus(): i32 {
+    return this.value0;
+  }
+
+  getDisputedBy(): BigInt {
+    return this.value1;
+  }
 }
 
 export class KRBTokenV01__revokeVCInputVcStruct extends ethereum.Tuple {
@@ -1154,15 +1200,21 @@ export class KRBTokenV01__revokeVCInputVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): KRBTokenV01__revokeVCInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__revokeVCInputVcIssuerStruct;
+    return changetype<KRBTokenV01__revokeVCInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__revokeVCInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__revokeVCInputVcCredentialSubjectStruct;
+    return changetype<KRBTokenV01__revokeVCInputVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): KRBTokenV01__revokeVCInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__revokeVCInputVcCredentialSchemaStruct;
+    return changetype<KRBTokenV01__revokeVCInputVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -1254,15 +1306,21 @@ export class KRBTokenV01__suspendVCInputVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): KRBTokenV01__suspendVCInputVcIssuerStruct {
-    return this[3].toTuple() as KRBTokenV01__suspendVCInputVcIssuerStruct;
+    return changetype<KRBTokenV01__suspendVCInputVcIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): KRBTokenV01__suspendVCInputVcCredentialSubjectStruct {
-    return this[4].toTuple() as KRBTokenV01__suspendVCInputVcCredentialSubjectStruct;
+    return changetype<KRBTokenV01__suspendVCInputVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): KRBTokenV01__suspendVCInputVcCredentialSchemaStruct {
-    return this[5].toTuple() as KRBTokenV01__suspendVCInputVcCredentialSchemaStruct;
+    return changetype<KRBTokenV01__suspendVCInputVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -2467,7 +2525,9 @@ export class DeleteVCCall__Inputs {
   }
 
   get vc(): DeleteVCCallVcStruct {
-    return this._call.inputValues[0].value.toTuple() as DeleteVCCallVcStruct;
+    return changetype<DeleteVCCallVcStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 
   get reason(): string {
@@ -2501,15 +2561,15 @@ export class DeleteVCCallVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): DeleteVCCallVcIssuerStruct {
-    return this[3].toTuple() as DeleteVCCallVcIssuerStruct;
+    return changetype<DeleteVCCallVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): DeleteVCCallVcCredentialSubjectStruct {
-    return this[4].toTuple() as DeleteVCCallVcCredentialSubjectStruct;
+    return changetype<DeleteVCCallVcCredentialSubjectStruct>(this[4].toTuple());
   }
 
   get credentialSchema(): DeleteVCCallVcCredentialSchemaStruct {
-    return this[5].toTuple() as DeleteVCCallVcCredentialSchemaStruct;
+    return changetype<DeleteVCCallVcCredentialSchemaStruct>(this[5].toTuple());
   }
 
   get issuanceDate(): string {
@@ -2605,11 +2665,15 @@ export class DisputeVCByGovernCall__Inputs {
   }
 
   get vc(): DisputeVCByGovernCallVcStruct {
-    return this._call.inputValues[0].value.toTuple() as DisputeVCByGovernCallVcStruct;
+    return changetype<DisputeVCByGovernCallVcStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 
   get disputeVC(): DisputeVCByGovernCallDisputeVCStruct {
-    return this._call.inputValues[1].value.toTuple() as DisputeVCByGovernCallDisputeVCStruct;
+    return changetype<DisputeVCByGovernCallDisputeVCStruct>(
+      this._call.inputValues[1].value.toTuple()
+    );
   }
 }
 
@@ -2639,15 +2703,19 @@ export class DisputeVCByGovernCallVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): DisputeVCByGovernCallVcIssuerStruct {
-    return this[3].toTuple() as DisputeVCByGovernCallVcIssuerStruct;
+    return changetype<DisputeVCByGovernCallVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): DisputeVCByGovernCallVcCredentialSubjectStruct {
-    return this[4].toTuple() as DisputeVCByGovernCallVcCredentialSubjectStruct;
+    return changetype<DisputeVCByGovernCallVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): DisputeVCByGovernCallVcCredentialSchemaStruct {
-    return this[5].toTuple() as DisputeVCByGovernCallVcCredentialSchemaStruct;
+    return changetype<DisputeVCByGovernCallVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -2739,15 +2807,21 @@ export class DisputeVCByGovernCallDisputeVCStruct extends ethereum.Tuple {
   }
 
   get issuer(): DisputeVCByGovernCallDisputeVCIssuerStruct {
-    return this[3].toTuple() as DisputeVCByGovernCallDisputeVCIssuerStruct;
+    return changetype<DisputeVCByGovernCallDisputeVCIssuerStruct>(
+      this[3].toTuple()
+    );
   }
 
   get credentialSubject(): DisputeVCByGovernCallDisputeVCCredentialSubjectStruct {
-    return this[4].toTuple() as DisputeVCByGovernCallDisputeVCCredentialSubjectStruct;
+    return changetype<DisputeVCByGovernCallDisputeVCCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): DisputeVCByGovernCallDisputeVCCredentialSchemaStruct {
-    return this[5].toTuple() as DisputeVCByGovernCallDisputeVCCredentialSchemaStruct;
+    return changetype<DisputeVCByGovernCallDisputeVCCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -2843,7 +2917,9 @@ export class ExpiredVCCall__Inputs {
   }
 
   get vc(): ExpiredVCCallVcStruct {
-    return this._call.inputValues[0].value.toTuple() as ExpiredVCCallVcStruct;
+    return changetype<ExpiredVCCallVcStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 }
 
@@ -2873,15 +2949,17 @@ export class ExpiredVCCallVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): ExpiredVCCallVcIssuerStruct {
-    return this[3].toTuple() as ExpiredVCCallVcIssuerStruct;
+    return changetype<ExpiredVCCallVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): ExpiredVCCallVcCredentialSubjectStruct {
-    return this[4].toTuple() as ExpiredVCCallVcCredentialSubjectStruct;
+    return changetype<ExpiredVCCallVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): ExpiredVCCallVcCredentialSchemaStruct {
-    return this[5].toTuple() as ExpiredVCCallVcCredentialSchemaStruct;
+    return changetype<ExpiredVCCallVcCredentialSchemaStruct>(this[5].toTuple());
   }
 
   get issuanceDate(): string {
@@ -3147,7 +3225,9 @@ export class RegisterVCCall__Inputs {
   }
 
   get vc(): RegisterVCCallVcStruct {
-    return this._call.inputValues[0].value.toTuple() as RegisterVCCallVcStruct;
+    return changetype<RegisterVCCallVcStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 
   get proofValue(): Bytes {
@@ -3181,15 +3261,19 @@ export class RegisterVCCallVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): RegisterVCCallVcIssuerStruct {
-    return this[3].toTuple() as RegisterVCCallVcIssuerStruct;
+    return changetype<RegisterVCCallVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): RegisterVCCallVcCredentialSubjectStruct {
-    return this[4].toTuple() as RegisterVCCallVcCredentialSubjectStruct;
+    return changetype<RegisterVCCallVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): RegisterVCCallVcCredentialSchemaStruct {
-    return this[5].toTuple() as RegisterVCCallVcCredentialSchemaStruct;
+    return changetype<RegisterVCCallVcCredentialSchemaStruct>(
+      this[5].toTuple()
+    );
   }
 
   get issuanceDate(): string {
@@ -3353,7 +3437,9 @@ export class RevokeVCCall__Inputs {
   }
 
   get vc(): RevokeVCCallVcStruct {
-    return this._call.inputValues[0].value.toTuple() as RevokeVCCallVcStruct;
+    return changetype<RevokeVCCallVcStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 
   get reason(): string {
@@ -3387,15 +3473,15 @@ export class RevokeVCCallVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): RevokeVCCallVcIssuerStruct {
-    return this[3].toTuple() as RevokeVCCallVcIssuerStruct;
+    return changetype<RevokeVCCallVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): RevokeVCCallVcCredentialSubjectStruct {
-    return this[4].toTuple() as RevokeVCCallVcCredentialSubjectStruct;
+    return changetype<RevokeVCCallVcCredentialSubjectStruct>(this[4].toTuple());
   }
 
   get credentialSchema(): RevokeVCCallVcCredentialSchemaStruct {
-    return this[5].toTuple() as RevokeVCCallVcCredentialSchemaStruct;
+    return changetype<RevokeVCCallVcCredentialSchemaStruct>(this[5].toTuple());
   }
 
   get issuanceDate(): string {
@@ -3491,7 +3577,9 @@ export class SuspendVCCall__Inputs {
   }
 
   get vc(): SuspendVCCallVcStruct {
-    return this._call.inputValues[0].value.toTuple() as SuspendVCCallVcStruct;
+    return changetype<SuspendVCCallVcStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 
   get reason(): string {
@@ -3525,15 +3613,17 @@ export class SuspendVCCallVcStruct extends ethereum.Tuple {
   }
 
   get issuer(): SuspendVCCallVcIssuerStruct {
-    return this[3].toTuple() as SuspendVCCallVcIssuerStruct;
+    return changetype<SuspendVCCallVcIssuerStruct>(this[3].toTuple());
   }
 
   get credentialSubject(): SuspendVCCallVcCredentialSubjectStruct {
-    return this[4].toTuple() as SuspendVCCallVcCredentialSubjectStruct;
+    return changetype<SuspendVCCallVcCredentialSubjectStruct>(
+      this[4].toTuple()
+    );
   }
 
   get credentialSchema(): SuspendVCCallVcCredentialSchemaStruct {
-    return this[5].toTuple() as SuspendVCCallVcCredentialSchemaStruct;
+    return changetype<SuspendVCCallVcCredentialSchemaStruct>(this[5].toTuple());
   }
 
   get issuanceDate(): string {

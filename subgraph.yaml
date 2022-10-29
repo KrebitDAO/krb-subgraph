@@ -1,17 +1,17 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: KRBTokenV01
-    network: mumbai
+    network: matic
     source:
-      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
+      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
       abi: KRBTokenV01
-      startBlock: 27536289
+      startBlock: 34095973
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Issuer
@@ -42,14 +42,14 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: erc20
-    network: mumbai
+    network: matic
     source:
-      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
+      address: "0xdEb4810c8AB3f9De3F253064A40b1D0c8703fbbf"
       abi: IERC20
-      startBlock: 27536289
+      startBlock: 34095973
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - ERC20Contract
@@ -62,49 +62,3 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./node_modules/@openzeppelin/subgraphs/src/datasources/erc20.ts
-  - kind: ethereum/contract
-    name: pausable
-    network: mumbai
-    source:
-      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
-      abi: Pausable
-      startBlock: 27536289
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Pausable
-      abis:
-        - name: Pausable
-          file: ./node_modules/@openzeppelin/contracts/build/contracts/Pausable.json
-      eventHandlers:
-        - event: Paused(address)
-          handler: handlePaused
-        - event: Unpaused(address)
-          handler: handleUnpaused
-      file: ./node_modules/@openzeppelin/subgraphs/src/datasources/pausable.ts
-  - kind: ethereum/contract
-    name: accesscontrol
-    network: mumbai
-    source:
-      address: "0x3210e026f93ed87B51b9798012727df6C8C9bAaA"
-      abi: AccessControl
-      startBlock: 27536289
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - AccessControl
-      abis:
-        - name: AccessControl
-          file: ./node_modules/@openzeppelin/contracts/build/contracts/AccessControl.json
-      eventHandlers:
-        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
-          handler: handleRoleAdminChanged
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleRevoked
-      file: ./node_modules/@openzeppelin/subgraphs/src/datasources/accesscontrol.ts

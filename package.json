@@ -11,11 +11,11 @@
     "deploy-matic": "yarn prepare:matic && graph deploy --product hosted-service krebit/krb-matic-v1"
   },
   "dependencies": {
-    "@amxx/graphprotocol-utils": "^1.0.0-alpha.12",
-    "@graphprotocol/graph-cli": "0.21.1",
-    "@graphprotocol/graph-ts": "0.20.0",
-    "@openzeppelin/contracts": "^4.2.0",
-    "@openzeppelin/subgraphs": "^0.1.2"
+    "@amxx/graphprotocol-utils": "^1.1.0",
+    "@graphprotocol/graph-cli": "0.35.0",
+    "@graphprotocol/graph-ts": "0.28.1",
+    "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/subgraphs": "^0.1.8-5"
   },
   "devDependencies": {
     "mustache": "^4.2.0"
